@@ -104,25 +104,32 @@ function handleSubmit(e) {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      uid,
-      tracklist_id: currentTl.id,
+      uid:            getOrCreateUID(),
+      tracklist_id:   currentTl.id,
+      tracklist_name: currentTl.tracklistName,
       pseudo,
-      track: trackName,
-      link: link || '',
+      track:          trackName,
+      link:           link || '',
     }),
   })
   .then(async res => {
     const data = await res.json();
+
     if (res.status === 403 && data.error === 'limit_reached') {
-      // Cas de désync localStorage/Airtable — on met à jour le local
       alert('Tu as déjà atteint la limite pour cette tracklist.');
+      _setSubmitLoading(false);
       goHome();
       return;
     }
+
     if (!res.ok) throw new Error(data.error || 'unknown');
+
     onSubmitSuccess(pseudo, trackName, link);
   })
-  .catch(() => onSubmitError());
+  .catch(() => {
+    _setSubmitLoading(false);
+    onSubmitError();
+  });
 }
 
 function onSubmitSuccess(pseudo, trackName, link) {
