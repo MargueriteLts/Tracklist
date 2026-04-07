@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TRACKLIST</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://use.typekit.net/max7mrn.css" />
+  <link rel="stylesheet" href="tracklist.css" />
+  <style>
+    /* ── Nom de tracklist sur la carte home ───────────────── */
+    .tracklist-name {
+      font-family: var(--font-primary);
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      text-transform: uppercase;
+      color: var(--text);
+      margin-bottom: 4px;
+      line-height: 1.15;
+    }
+
+    /* ── Header page submit ───────────────────────────────── */
+    .submit-tracklist-name {
+      font-family: var(--font-primary);
+      font-size: clamp(42px, 6vw, 68px);
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      text-transform: uppercase;
+      color: var(--text);
+      line-height: 1;
+      margin-bottom: 10px;
+    }
+    /* submit-dj-name : réduit, gris clair */
+    #submit-dj-name {
+      font-family: var(--font-primary);
+      font-size: 18px;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    .submit-dj-bio {
+      font-family: var(--font-secondary);
+      font-size: 14px;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      color: var(--text-muted);
+      line-height: 1.7;
+      max-width: 420px;
+      margin: 0 auto 18px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="nav">
+    <span class="nav-logo" onclick="goHome()">TRACKLIST</span>
+    <a class="nav-link" onclick="showPage('about')">About Us</a>
+  </nav>
+
+  <!-- PAGE : HOME -->
+  <main id="page-home" class="page active">
+    <div class="tracklist-grid" id="tracklist-grid">
+      <!-- Cards are rendered by JS -->
+    </div>
+  </main>
+
+  <!-- PAGE : SUBMIT -->
+  <main id="page-submit" class="page">
+    <button class="back-btn" onclick="goHome()">
+      <span class="back-arrow">←</span> Retour
+    </button>
+
+    <div class="submit-header">
+      <div class="submit-progress-wrap">
+        <div class="progress-bar" id="submit-progress-bar" style="width:0%"></div>
+      </div>
+      <div class="submit-tracklist-name" id="submit-tracklist-name"></div>
+      <div class="submit-dj-name" id="submit-dj-name"></div>
+      <div class="submit-dj-bio" id="submit-dj-bio"></div>
+      <div class="submit-limit-note" id="submit-limit-note"></div>
+    </div>
+
+    <!-- FORM STATE -->
+    <div id="form-state">
+      <form class="submit-form" id="submit-form" onsubmit="handleSubmit(event)" novalidate>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="input-pseudo">
+              Ton pseudo
+              <span class="pseudo-info">ⓘ
+                <span class="pseudo-tooltip">Ton pseudo sert à identifier tes soumissions.</span>
+              </span>
+            </label>
+            <input
+              class="form-input"
+              id="input-pseudo"
+              type="text"
+              placeholder="dj_shadow_fan"
+              autocomplete="off"
+            />
+            <span class="field-error" id="error-pseudo"></span>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="input-track">Nom de la track & artiste</label>
+            <input
+              class="form-input"
+              id="input-track"
+              type="text"
+              placeholder="Artiste — Titre"
+              autocomplete="off"
+            />
+            <span class="field-error" id="error-track"></span>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group full">
+            <label class="form-label" for="input-link">
+              Lien de streaming <span class="optional">(facultatif)</span>
+            </label>
+            <input
+              class="form-input"
+              id="input-link"
+              type="url"
+              placeholder="Spotify, SoundCloud, YouTube…"
+              autocomplete="off"
+            />
+            <span class="field-error" id="error-link"></span>
+          </div>
+        </div>
+
+        <div class="track-counter" id="track-counter">1/2</div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-solid" id="btn-submit">Envoyer</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- CONFIRMATION STATE -->
+    <div id="confirm-state" style="display:none;">
+      <div class="confirmation-block">
+        <div class="confirmation-icon">✓</div>
+        <div class="confirmation-track" id="confirm-track-name"></div>
+        <div class="confirmation-title" id="confirm-title">Track envoyée !</div>
+        <div class="confirmation-sub" id="confirm-sub"></div>
+        <div class="confirmation-actions" id="confirm-actions"></div>
+      </div>
+    </div>
+  </main>
+
+  <!-- PAGE : ABOUT -->
+  <main id="page-about" class="page">
+    <div class="about-content">
+      <div class="about-title">About</div>
+      <div class="about-text">
+        <p>Tracklist est un concept participatif : chaque tracklist est construite à partir de vos propositions. Les DJs sélectionnent, assemblent, et diffusent.</p>
+        <p>Vous pouvez soumettre jusqu'à 2 tracks par tracklist. Pas de compte nécessaire — juste votre pseudo et votre sélection musicale.</p>
+        <p>Les sets sont enregistrés en session radio privée, et les événements accueillent un public intentionnel de moins de 180 personnes.</p>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    TRACKLIST © 2026 — Tous droits réservés
+  </footer>
+
+<script>
+/* ══════════════════════════════════════════════════════════════
+   DATA — Edit this to configure your tracklists
+══════════════════════════════════════════════════════════════ */
+const TRACKLISTS = [
+  {
+    id: 'tl1',
+    tracklistName: 'NOM TRACKLIST 1',  // nom affiché en grand blanc
+    djName: 'NAME OF DJ1',
+    djBio: 'Une bio courte qui décrit la vibe musicale du DJ — son univers, ses influences, l\'énergie qu\'il apporte.',
+    tags: ['hardgroove', 'solaire'],
+    photo: null,           // set to image path when ready e.g. 'photos/dj1.jpg'
+    maxTracks: 2,
+    totalCapacity: 60,     // how many tracks until bar is "full"
+    currentTotal: 60,      // current submissions from all users (update from backend)
+    mystery: false,
+  },
+  {
+    id: 'tl2',
+    tracklistName: 'NOM TRACKLIST 2',
+    djName: 'NAME OF DJ2',
+    djBio: 'Une bio courte qui décrit la vibe musicale du DJ — son univers, ses influences, l\'énergie qu\'il apporte.',
+    tags: ['trance', 'bouncy', 'funky'],
+    photo: null,
+    maxTracks: 2,
+    totalCapacity: 60,
+    currentTotal: 34,
+    mystery: false,
+  },
+  {
+    id: 'tl3',
+    tracklistName: 'NOM TRACKLIST 3',
+    djName: null,
+    djBio: null,           // null si mystery DJ
+    tags: ['mentale', 'mélancolique'],
+    photo: null,
+    maxTracks: 2,
+    totalCapacity: 60,
+    currentTotal: 8,
+    mystery: true,
+  },
+];
+
+/* ══════════════════════════════════════════════════════════════
+   FINGERPRINT + PSEUDO PERSISTENCE
+══════════════════════════════════════════════════════════════ */
+const STORAGE_KEY = 'tracklist_v1';
+
+function getFingerprint() {
+  const signals = [
+    navigator.language,
+    navigator.platform,
+    screen.width + 'x' + screen.height,
+    screen.colorDepth,
+    new Date().getTimezoneOffset(),
+    navigator.hardwareConcurrency || 0,
+  ].join('|');
+  let hash = 0;
+  for (let i = 0; i < signals.length; i++) {
+    hash = ((hash << 5) - hash) + signals.charCodeAt(i);
+    hash |= 0;
+  }
+  return Math.abs(hash).toString(36);
+}
+
+function getOrCreateUID() {
+  let data = loadData();
+  if (!data.uid) {
+    const fp   = getFingerprint();
+    const rand = Math.random().toString(36).slice(2, 8);
+    data.uid   = fp + '_' + rand;
+    saveData(data);
+  }
+  return data.uid;
+}
+
+function loadData() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }
+  catch { return {}; }
+}
+
+function saveData(data) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+function getUserCount(tlId) {
+  const data = loadData();
+  return (data.submissions && data.submissions[tlId]) ? data.submissions[tlId].length : 0;
+}
+
+function recordSubmission(tlId, pseudo, trackName, link) {
+  const data = loadData();
+  if (!data.submissions) data.submissions = {};
+  if (!data.submissions[tlId]) data.submissions[tlId] = [];
+  data.submissions[tlId].push({ pseudo, trackName, link, ts: Date.now() });
+  data.lastPseudo = pseudo;
+  saveData(data);
+}
+
+function getLastPseudo() {
+  return loadData().lastPseudo || '';
+}
+
+/* ══════════════════════════════════════════════════════════════
+   STATE
+══════════════════════════════════════════════════════════════ */
+let currentTl = null;
+
+/* ══════════════════════════════════════════════════════════════
+   NAVIGATION
+══════════════════════════════════════════════════════════════ */
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function goHome() {
+  currentTl = null;
+  renderHome();
+  showPage('home');
+}
+
+/* ══════════════════════════════════════════════════════════════
+   HOME RENDER
+══════════════════════════════════════════════════════════════ */
+function renderHome() {
+  const grid = document.getElementById('tracklist-grid');
+  grid.innerHTML = '';
+
+  TRACKLISTS.forEach(tl => {
+    const userCount   = getUserCount(tl.id);
+    const isFull      = tl.currentTotal >= tl.totalCapacity;
+    const userDone    = userCount >= tl.maxTracks;
+    const progressPct = Math.min(100, (tl.currentTotal / tl.totalCapacity) * 100);
+
+    const card = document.createElement('div');
+    card.className = 'tracklist-card';
+
+    const progressHtml = isFull
+      ? `<div class="card-full-label">Tracklist Complète</div>`
+      : `<div class="progress-wrap">
+           <div class="progress-bar" style="width:${progressPct}%"></div>
+         </div>`;
+
+    const photoHtml = tl.photo
+      ? `<img src="${tl.photo}" alt="${tl.djName || 'DJ mystère'}" loading="lazy" />`
+      : `<div class="card-placeholder"></div>`;
+
+    const nameHtml = tl.mystery
+      ? `<div class="dj-name" style="letter-spacing:0.25em; color:var(--text-muted)">X X X X X</div>`
+      : `<div class="dj-name">${tl.djName}</div>`;
+
+    const tagsHtml = `<div class="dj-tags">${tl.tags.map(t => '#' + t).join(' ')}</div>`;
+
+    let ctaHtml;
+    if (userDone) {
+      ctaHtml = `<div class="sent-label">${tl.maxTracks}/${tl.maxTracks} tracks envoyées</div>`;
+    } else {
+      const countLabel = userCount > 0 ? `${userCount}/${tl.maxTracks}` : `0/${tl.maxTracks}`;
+      ctaHtml = `
+        <button class="btn btn-outline" onclick="openSubmit('${tl.id}')">
+          Envoyer des tracks
+          <span class="btn-counter">${countLabel}</span>
+        </button>`;
+    }
+
+    card.innerHTML = `
+      ${progressHtml}
+      <div class="card-body">
+        ${photoHtml}
+      </div>
+      <div class="card-info">
+        <div class="tracklist-name">${tl.tracklistName}</div>
+        ${nameHtml}
+        ${tagsHtml}
+      </div>
+      <div class="card-cta">
+        ${ctaHtml}
+      </div>`;
+
+    grid.appendChild(card);
+  });
+}
+
+/* ══════════════════════════════════════════════════════════════
+   SUBMIT PAGE
+══════════════════════════════════════════════════════════════ */
+function openSubmit(tlId) {
+  const tl = TRACKLISTS.find(t => t.id === tlId);
+  if (!tl) return;
+  currentTl = tl;
+
+  const userCount   = getUserCount(tl.id);
+  const progressPct = Math.min(100, (tl.currentTotal / tl.totalCapacity) * 100);
+
+  document.getElementById('submit-progress-bar').style.width    = progressPct + '%';
+  document.getElementById('submit-tracklist-name').textContent  = tl.tracklistName;
+  document.getElementById('submit-dj-name').textContent         = tl.mystery ? 'X X X X X' : tl.djName;
+  document.getElementById('submit-dj-bio').textContent          = tl.mystery ? '' : (tl.djBio || '');
+  document.getElementById('submit-limit-note').textContent      =
+    `Tu peux envoyer maximum ${tl.maxTracks} track${tl.maxTracks > 1 ? 's' : ''} sur cette tracklist`;
+
+  const nextTrack = userCount + 1;
+  document.getElementById('track-counter').textContent = `${nextTrack}/${tl.maxTracks}`;
+
+  document.getElementById('input-pseudo').value = getLastPseudo();
+  document.getElementById('input-track').value  = '';
+  document.getElementById('input-link').value   = '';
+  clearErrors();
+
+  document.getElementById('form-state').style.display    = 'block';
+  document.getElementById('confirm-state').style.display = 'none';
+
+  showPage('submit');
+}
+
+/* ── VALIDATION ───────────────────────────────────────────── */
+function clearErrors() {
+  ['pseudo', 'track', 'link'].forEach(f => {
+    const el  = document.getElementById('error-' + f);
+    const inp = document.getElementById('input-' + f);
+    if (el)  el.textContent = '';
+    if (inp) inp.classList.remove('error');
+  });
+}
+
+function setError(field, msg) {
+  document.getElementById('error-' + field).textContent = msg;
+  document.getElementById('input-' + field).classList.add('error');
+}
+
+function validateForm() {
+  clearErrors();
+  let valid = true;
+  const pseudo = document.getElementById('input-pseudo').value.trim();
+  const track  = document.getElementById('input-track').value.trim();
+  const link   = document.getElementById('input-link').value.trim();
+
+  if (!pseudo)             { setError('pseudo', 'Ton pseudo est requis.'); valid = false; }
+  else if (pseudo.length < 2) { setError('pseudo', 'Minimum 2 caractères.'); valid = false; }
+
+  if (!track)             { setError('track', "Indique le nom de la track et de l'artiste."); valid = false; }
+  else if (track.length < 3) { setError('track', 'Minimum 3 caractères.'); valid = false; }
+
+  if (link && !isValidUrl(link)) { setError('link', 'Le lien ne semble pas valide.'); valid = false; }
+
+  return valid;
+}
+
+function isValidUrl(str) {
+  try { new URL(str); return true; } catch { return false; }
+}
+
+/* ── SUBMIT HANDLER ───────────────────────────────────────── */
+function handleSubmit(e) {
+  e.preventDefault();
+  if (!currentTl) return;
+  if (!validateForm()) return;
+
+  const pseudo    = document.getElementById('input-pseudo').value.trim();
+  const trackName = document.getElementById('input-track').value.trim();
+  const link      = document.getElementById('input-link').value.trim();
+  const uid       = getOrCreateUID();
+
+  const userCount = getUserCount(currentTl.id);
+  if (userCount >= currentTl.maxTracks) {
+    alert('Tu as déjà envoyé le maximum de tracks pour cette tracklist.');
+    return;
+  }
+
+  const btn = document.getElementById('btn-submit');
+  btn.textContent = 'Envoi…';
+  btn.disabled    = true;
+
+  // ── SEND TO BACKEND ──────────────────────────────────────
+  // fetch('https://api.airtable.com/v0/YOUR_BASE_ID/Submissions', {
+  //   method: 'POST',
+  //   headers: {
+  //     'Authorization': 'Bearer YOUR_API_KEY',
+  //     'Content-Type': 'application/json',
+  //   },
+  //   body: JSON.stringify({
+  //     fields: { Pseudo: pseudo, Track: trackName, Link: link,
+  //               Tracklist: currentTl.djName || 'Mystère', UID: uid }
+  //   })
+  // })
+  // .then(r => r.json())
+  // .then(() => onSubmitSuccess(pseudo, trackName, link))
+  // .catch(() => onSubmitError());
+
+  // MOCK — 700ms simulated network
+  setTimeout(() => onSubmitSuccess(pseudo, trackName, link), 700);
+}
+
+function onSubmitSuccess(pseudo, trackName, link) {
+  recordSubmission(currentTl.id, pseudo, trackName, link);
+  currentTl.currentTotal = Math.min(currentTl.totalCapacity, currentTl.currentTotal + 1);
+
+  const userCount   = getUserCount(currentTl.id);
+  const canSendMore = userCount < currentTl.maxTracks;
+
+  document.getElementById('confirm-title').textContent      = 'Track envoyée !';
+  document.getElementById('confirm-track-name').textContent = `« ${trackName} »`;
+  document.getElementById('confirm-sub').textContent        = canSendMore
+    ? 'Tu peux encore envoyer une track à cette tracklist.'
+    : `Tu as atteint la limite de ${currentTl.maxTracks} tracks pour cette tracklist.`;
+
+  const actionsEl = document.getElementById('confirm-actions');
+  actionsEl.innerHTML = '';
+
+  if (canSendMore) {
+    const btn1       = document.createElement('button');
+    btn1.className   = 'btn btn-solid';
+    btn1.textContent = 'Envoyer une 2ème track';
+    btn1.onclick     = () => openSubmitSecond();
+    actionsEl.appendChild(btn1);
+  }
+
+  const btn2       = document.createElement('button');
+  btn2.className   = 'btn btn-ghost';
+  btn2.textContent = 'Envoyer une track à une autre tracklist';
+  btn2.onclick     = () => goHome();
+  actionsEl.appendChild(btn2);
+
+  document.getElementById('form-state').style.display    = 'none';
+  document.getElementById('confirm-state').style.display = 'block';
+
+  const btn       = document.getElementById('btn-submit');
+  btn.textContent = 'Envoyer';
+  btn.disabled    = false;
+}
+
+function onSubmitError() {
+  const btn       = document.getElementById('btn-submit');
+  btn.textContent = 'Envoyer';
+  btn.disabled    = false;
+  setError('track', 'Une erreur est survenue. Réessaie dans un instant.');
+}
+
+function openSubmitSecond() {
+  const userCount = getUserCount(currentTl.id);
+  const nextTrack = userCount + 1;
+
+  document.getElementById('track-counter').textContent = `${nextTrack}/${currentTl.maxTracks}`;
+  document.getElementById('input-pseudo').value        = getLastPseudo();
+  document.getElementById('input-track').value         = '';
+  document.getElementById('input-link').value          = '';
+  clearErrors();
+
+  document.getElementById('confirm-state').style.display = 'none';
+  document.getElementById('form-state').style.display    = 'block';
+}
+
+/* ══════════════════════════════════════════════════════════════
+   NAV SCROLL EFFECT
+══════════════════════════════════════════════════════════════ */
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 10);
+});
+
+/* ══════════════════════════════════════════════════════════════
+   INIT
+══════════════════════════════════════════════════════════════ */
+getOrCreateUID();
+renderHome();
+</script>
+</body>
+</html>

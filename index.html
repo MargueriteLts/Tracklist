@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TRACKLIST</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://use.typekit.net/max7mrn.css" />
+  <link rel="stylesheet" href="tracklist.css" />
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="nav">
+    <span class="nav-logo" onclick="goHome()">TRACKLIST</span>
+    <a class="nav-link" onclick="showPage('about')">About Us</a>
+  </nav>
+
+  <!-- PAGE : HOME -->
+  <main id="page-home" class="page active">
+    <div class="tracklist-grid" id="tracklist-grid">
+      <!-- Cartes rendues dynamiquement par ui.js -->
+    </div>
+  </main>
+
+  <!-- PAGE : SUBMIT -->
+  <main id="page-submit" class="page">
+    <button class="back-btn" onclick="goHome()">
+      <span class="back-arrow">←</span> Retour
+    </button>
+
+    <div class="submit-header">
+      <div class="submit-progress-wrap">
+        <div class="progress-bar" id="submit-progress-bar" style="width:0%"></div>
+      </div>
+      <div class="submit-tracklist-name" id="submit-tracklist-name"></div>
+      <div class="submit-dj-tags"        id="submit-dj-tags"></div>
+      <div class="submit-dj-name"        id="submit-dj-name"></div>
+      <div class="submit-dj-bio"         id="submit-dj-bio"></div>
+      <div class="submit-limit-note"     id="submit-limit-note"></div>
+    </div>
+
+    <!-- ÉTAT : FORMULAIRE -->
+    <div id="form-state">
+      <form class="submit-form" id="submit-form" onsubmit="handleSubmit(event)" novalidate>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="input-pseudo">
+              Ton pseudo
+              <span class="pseudo-info">ⓘ
+                <span class="pseudo-tooltip">Ton pseudo sert à identifier tes soumissions.</span>
+              </span>
+            </label>
+            <input class="form-input" id="input-pseudo" type="text"
+                   placeholder="dj_shadow_fan" autocomplete="off" />
+            <span class="field-error" id="error-pseudo"></span>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="input-track">Nom de la track & artiste</label>
+            <input class="form-input" id="input-track" type="text"
+                   placeholder="Artiste — Titre" autocomplete="off" />
+            <span class="field-error" id="error-track"></span>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group full">
+            <label class="form-label" for="input-link">
+              Lien de streaming <span class="optional">(facultatif)</span>
+            </label>
+            <input class="form-input" id="input-link" type="url"
+                   placeholder="Spotify, SoundCloud, YouTube…" autocomplete="off" />
+            <span class="field-error" id="error-link"></span>
+          </div>
+        </div>
+        <div class="track-counter" id="track-counter">1/2</div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-solid" id="btn-submit">Envoyer</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- ÉTAT : CONFIRMATION -->
+    <div id="confirm-state" style="display:none;">
+      <div class="confirmation-block">
+        <div class="confirmation-icon">✓</div>
+        <div class="confirmation-track" id="confirm-track-name"></div>
+        <div class="confirmation-title" id="confirm-title">Track envoyée !</div>
+        <div class="confirmation-sub"   id="confirm-sub"></div>
+        <div class="confirmation-actions" id="confirm-actions"></div>
+      </div>
+    </div>
+  </main>
+
+  <!-- PAGE : ABOUT -->
+  <main id="page-about" class="page">
+    <div class="about-content">
+      <div class="about-title">About</div>
+      <div class="about-text">
+        <p>Tracklist est un concept participatif : chaque tracklist est construite à partir de vos propositions. Les DJs sélectionnent, assemblent, et diffusent.</p>
+        <p>Vous pouvez soumettre jusqu'à 2 tracks par tracklist. Pas de compte nécessaire — juste votre pseudo et votre sélection musicale.</p>
+        <p>Les sets sont enregistrés en session radio privée, et les événements accueillent un public intentionnel de moins de 180 personnes.</p>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    TRACKLIST © 2026 — Tous droits réservés
+  </footer>
+
+  <!--
+    Ordre de chargement des scripts — IMPORTANT :
+    Chaque fichier dépend de ceux chargés avant lui.
+
+    data.js    → les données (TRACKLISTS)
+    storage.js → lit/écrit localStorage, utilise rien d'autre
+    ui.js      → utilise TRACKLISTS + storage.js
+    form.js    → utilise TRACKLISTS + storage.js + ui.js (showPage, goHome)
+    main.js    → initialise tout, utilise storage.js + ui.js
+  -->
+  <script src="js/data.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/form.js"></script>
+  <script src="js/main.js"></script>
+
+</body>
+</html>
