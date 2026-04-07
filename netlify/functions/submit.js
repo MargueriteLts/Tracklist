@@ -54,16 +54,50 @@ exports.handler = async (event) => {
 
   // ── VÉRIFICATION AUTHORITATIVE ────────────────────────────
   // Compte les soumissions existantes pour cet uid + tracklist
-  const filterFormula = encodeURIComponent(
+  //const filterFormula = encodeURIComponent(
+  //  `AND({uid}="${uid}", {tracklist_id}="${tracklist_id}")`
+  //);
+
+  //const checkRes = await fetch(
+  //  `${AIRTABLE_API}?filterByFormula=${filterFormula}&fields%5B%5D=uid`,
+  //  { headers }
+  //);
+
+  //if (!checkRes.ok) {
+  //  return {
+  //    statusCode: 502,
+  //    headers: cors,
+  //    body: JSON.stringify({ error: 'Airtable check failed' }),
+  //  };
+  //}
+
+  //const checkData = await checkRes.json();
+
+  //if (checkData.records.length >= MAX_PER_USER) {
+  //  return {
+  //    statusCode: 403,
+  //    headers: cors,
+  //    body: JSON.stringify({
+  //      error: 'limit_reached',
+  //      count: checkData.records.length,
+  //    }),
+  //  };
+  //}
+
+  // Vérification par uid ET par pseudo
+  const filterUid = encodeURIComponent(
     `AND({uid}="${uid}", {tracklist_id}="${tracklist_id}")`
   );
-
-  const checkRes = await fetch(
-    `${AIRTABLE_API}?filterByFormula=${filterFormula}&fields%5B%5D=uid`,
-    { headers }
+  const filterPseudo = encodeURIComponent(
+    `AND({pseudo}="${pseudo}", {tracklist_id}="${tracklist_id}")`
   );
 
-  if (!checkRes.ok) {
+  const [checkUid, checkPseudo] = await Promise.all([
+    fetch(`${AIRTABLE_API}?filterByFormula=${filterUid}&fields%5B%5D=uid`, { headers }),
+    fetch(`${AIRTABLE_API}?filterByFormula=${filterPseudo}&fields%5B%5D=pseudo`, { headers }),
+  ]);
+
+  if (!checkUid.ok || !checkPseudo.ok) {
     return {
       statusCode: 502,
       headers: cors,
@@ -71,16 +105,24 @@ exports.handler = async (event) => {
     };
   }
 
-  const checkData = await checkRes.json();
+  const [dataUid, dataPseudo] = await Promise.all([
+    checkUid.json(),
+    checkPseudo.json(),
+  ]);
 
-  if (checkData.records.length >= MAX_PER_USER) {
+  if (dataUid.records.length >= MAX_PER_USER) {
     return {
       statusCode: 403,
       headers: cors,
-      body: JSON.stringify({
-        error: 'limit_reached',
-        count: checkData.records.length,
-      }),
+      body: JSON.stringify({ error: 'limit_reached', reason: 'uid' }),
+    };
+  }
+
+  if (dataPseudo.records.length >= MAX_PER_USER) {
+    return {
+      statusCode: 403,
+      headers: cors,
+      body: JSON.stringify({ error: 'limit_reached', reason: 'pseudo' }),
     };
   }
 
