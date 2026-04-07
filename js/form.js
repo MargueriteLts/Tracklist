@@ -100,29 +100,29 @@ function handleSubmit(e) {
   // ── ENVOI VERS LE BACKEND ────────────────────────────────
   // Décommente et configure ce bloc quand Airtable est prêt :
 
-   fetch('https://api.airtable.com/v0/YOUR_BASE_ID/Submissions', {
-     method: 'POST',
-     headers: {
-       'Authorization': 'Bearer YOUR_API_KEY', // → passer par une serverless function
-       'Content-Type': 'application/json',
-     },
-     body: JSON.stringify({
-       fields: {
-         tracklist_name: currentTl.tracklistName,
-         Pseudo:     pseudo,
-         Track:      trackName,
-         Link:       link,
-         Tracklist:  currentTl.tracklistName,
-         UID:        uid,
-       }
-     })
-   })
-   .then(r => r.json())
-   .then(() => onSubmitSuccess(pseudo, trackName, link))
-   .catch(() => onSubmitError());
-
-  // MOCK — simule 700ms de réseau
-  setTimeout(() => onSubmitSuccess(pseudo, trackName, link), 700);
+  fetch('/.netlify/functions/submit', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      uid,
+      tracklist_id: currentTl.id,
+      pseudo,
+      track: trackName,
+      link: link || '',
+    }),
+  })
+  .then(async res => {
+    const data = await res.json();
+    if (res.status === 403 && data.error === 'limit_reached') {
+      // Cas de désync localStorage/Airtable — on met à jour le local
+      alert('Tu as déjà atteint la limite pour cette tracklist.');
+      goHome();
+      return;
+    }
+    if (!res.ok) throw new Error(data.error || 'unknown');
+    onSubmitSuccess(pseudo, trackName, link);
+  })
+  .catch(() => onSubmitError());
 }
 
 function onSubmitSuccess(pseudo, trackName, link) {
