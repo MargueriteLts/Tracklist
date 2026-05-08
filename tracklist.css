@@ -147,13 +147,29 @@ nav.scrolled { border-color: var(--border); }
 .tracklist-card:nth-child(3) { animation-delay: 0.14s; }
 
 /* Progress bar */
-.progress-wrap {
+.progress-wrap-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   width: 100%;
   margin-bottom: 16px;
+}
+.progress-wrap {
+  flex: 1;
   height: 5px;
   background: var(--progress-bg);
   border-radius: 999px;
   overflow: hidden;
+}
+.progress-pct {
+  font-family: var(--font-secondary);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  min-width: 28px;
+  text-align: right;
 }
 .progress-bar {
   height: 100%;
@@ -360,12 +376,11 @@ nav.scrolled { border-color: var(--border); }
 }
 
 .submit-progress-wrap {
-  width: 240px;
   height: 5px;
   background: var(--progress-bg);
   border-radius: 999px;
   overflow: hidden;
-  margin: 0 auto 28px;
+  flex: 1;
 }
 
 /* Nom de tracklist sur la carte home */
@@ -661,6 +676,31 @@ nav.scrolled { border-color: var(--border); }
 }
 .about-text p { margin-bottom: 18px; }
 .about-text p:last-child { margin-bottom: 0; }
+
+/* ── DEADLINE LABELS ─────────────────────────────────────────── */
+
+/* Home card — sous le CTA */
+.deadline-label {
+  font-family: var(--font-secondary);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  text-align: center;
+  margin-top: 10px;
+}
+
+/* Page submit — en haut du header */
+.submit-deadline {
+  font-family: var(--font-secondary);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+}
 
 /* ── FOOTER ──────────────────────────────────────────────────── */
 footer {

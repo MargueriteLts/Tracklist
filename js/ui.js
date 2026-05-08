@@ -42,8 +42,11 @@ function renderHome() {
 function _buildCardHTML({ tl, isFull, userDone, userCount, progressPct, effectiveMax }) {
   const progressHtml = isFull
     ? `<div class="card-full-label">Tracklist Complète</div>`
-    : `<div class="progress-wrap">
-         <div class="progress-bar" style="width:${progressPct}%"></div>
+    : `<div class="progress-wrap-row">
+         <div class="progress-wrap">
+           <div class="progress-bar" style="width:${progressPct}%"></div>
+         </div>
+         <span class="progress-pct">${Math.round(progressPct)}%</span>
        </div>`;
 
   const photoHtml = tl.photo
@@ -81,6 +84,7 @@ function _buildCardHTML({ tl, isFull, userDone, userCount, progressPct, effectiv
     </div>
     <div class="card-cta">
       ${ctaHtml}
+      <div class="deadline-label">Deadline : 26.05.26</div>
     </div>`;
 }
 

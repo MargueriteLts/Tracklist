@@ -17,6 +17,7 @@ function openSubmit(tlId) {
 
   // Remplir le header
   document.getElementById('submit-progress-bar').style.width   = progressPct + '%';
+  document.getElementById('submit-progress-pct').textContent   = Math.round(progressPct) + '%';
   document.getElementById('submit-tracklist-name').textContent = tl.tracklistName;
   document.getElementById('submit-dj-tags').textContent        = tl.tags.map(t => '#' + t).join(' ');
   document.getElementById('submit-dj-name').textContent        = tl.mystery ? 'X X X X X' : tl.djName;
