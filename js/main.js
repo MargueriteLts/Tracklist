@@ -4,18 +4,26 @@
 
 let currentTl = null;
 
-// Charge les compteurs depuis Airtable avant de rendre la home
+renderSkeleton(3);
+
+// Charge les playlists et les compteurs depuis Airtable avant de rendre la home
 const uid = getOrCreateUID();
-fetch(`/.netlify/functions/counts?uid=${encodeURIComponent(uid)}`)
-  .then(r => r.json())
-  .then(data => {
-    const counts = data.counts || {};
+Promise.all([
+  fetch('/.netlify/functions/playlists').then(r => r.json()),
+  fetch(`/.netlify/functions/counts?uid=${encodeURIComponent(uid)}`).then(r => r.json()),
+])
+  .then(([playlistsData, countsData]) => {
+    // Peuple TRACKLISTS depuis Airtable
+    TRACKLISTS.length = 0;
+    (playlistsData.playlists || []).forEach(tl => TRACKLISTS.push(tl));
+
+    const counts = countsData.counts || {};
     TRACKLISTS.forEach(tl => {
       tl.currentTotal = counts[tl.id] ?? 0;
     });
 
     // Mémorise les comptes Airtable (source de vérité côté serveur)
-    const userCounts = data.userCounts || {};
+    const userCounts = countsData.userCounts || {};
     TRACKLISTS.forEach(tl => {
       setServerCount(tl.id, userCounts[tl.id] || 0);
     });
@@ -29,8 +37,7 @@ fetch(`/.netlify/functions/counts?uid=${encodeURIComponent(uid)}`)
     });
   })
   .catch(() => {
-    // En cas d'erreur réseau, on utilise les valeurs de data.js
-    console.warn('Impossible de charger les compteurs depuis Airtable.');
+    console.warn('Impossible de charger les données depuis Airtable.');
   })
   .finally(() => {
     renderHome();

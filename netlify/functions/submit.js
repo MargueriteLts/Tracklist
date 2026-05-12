@@ -1,12 +1,13 @@
 // netlify/functions/submit.js
 
-const AIRTABLE_TOKEN   = process.env.AIRTABLE_TOKEN;
-const AIRTABLE_BASE_ID = process.env.AIRTABLE_BASE_ID;
-const AIRTABLE_TABLE   = process.env.AIRTABLE_TABLE_ID;
-const MAX_PER_USER     = 2;
-const VALID_TRACKLIST_IDS = new Set(['tl1', 'tl2', 'tl3']);
+const AIRTABLE_TOKEN            = process.env.AIRTABLE_TOKEN;
+const AIRTABLE_BASE_ID          = process.env.AIRTABLE_BASE_ID;
+const AIRTABLE_TABLE            = process.env.AIRTABLE_TABLE_ID;
+const AIRTABLE_PLAYLISTS_TABLE  = process.env.AIRTABLE_PLAYLISTS_TABLE_ID;
+const MAX_PER_USER              = 2;
 
-const AIRTABLE_API = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE}`;
+const AIRTABLE_API          = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE}`;
+const AIRTABLE_PLAYLISTS_API = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_PLAYLISTS_TABLE}`;
 
 const headers = {
   'Authorization': `Bearer ${AIRTABLE_TOKEN}`,
@@ -53,45 +54,27 @@ exports.handler = async (event) => {
     };
   }
 
-  if (!VALID_TRACKLIST_IDS.has(tracklist_id)) {
+  // Vérifie que la tracklist existe et n'est pas cachée dans Airtable
+  const filterPlaylist = encodeURIComponent(`AND({id}="${tracklist_id}", NOT({hidden}))`);
+  const playlistCheck = await fetch(
+    `${AIRTABLE_PLAYLISTS_API}?filterByFormula=${filterPlaylist}&fields%5B%5D=id`,
+    { headers }
+  );
+  if (!playlistCheck.ok) {
+    return {
+      statusCode: 502,
+      headers: cors,
+      body: JSON.stringify({ error: 'Playlist check failed' }),
+    };
+  }
+  const playlistData = await playlistCheck.json();
+  if (!playlistData.records.length) {
     return {
       statusCode: 400,
       headers: cors,
       body: JSON.stringify({ error: 'Invalid tracklist_id' }),
     };
   }
-
-  // ── VÉRIFICATION AUTHORITATIVE ────────────────────────────
-  // Compte les soumissions existantes pour cet uid + tracklist
-  //const filterFormula = encodeURIComponent(
-  //  `AND({uid}="${uid}", {tracklist_id}="${tracklist_id}")`
-  //);
-
-  //const checkRes = await fetch(
-  //  `${AIRTABLE_API}?filterByFormula=${filterFormula}&fields%5B%5D=uid`,
-  //  { headers }
-  //);
-
-  //if (!checkRes.ok) {
-  //  return {
-  //    statusCode: 502,
-  //    headers: cors,
-  //    body: JSON.stringify({ error: 'Airtable check failed' }),
-  //  };
-  //}
-
-  //const checkData = await checkRes.json();
-
-  //if (checkData.records.length >= MAX_PER_USER) {
-  //  return {
-  //    statusCode: 403,
-  //    headers: cors,
-  //    body: JSON.stringify({
-  //      error: 'limit_reached',
-  //      count: checkData.records.length,
-  //    }),
-  //  };
-  //}
 
   // Validation des longueurs
   if (pseudo.length > 50 || track.length > 200 || (link && link.length > 500)) {

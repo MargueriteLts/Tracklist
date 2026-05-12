@@ -7,6 +7,7 @@ const TRANSLATIONS = {
   fr: {
     /* Nav */
     'nav.about': 'À propos',
+    'nav.close': 'Fermer',
 
     /* Submit — navigation & formulaire */
     'back_btn':            '← Retour',
@@ -18,7 +19,7 @@ const TRANSLATIONS = {
     'form.submit_btn':          'Envoyer',
     'form.submitting':          'Envoi…',
     'form.pseudo_placeholder':  'dj_shadow_fan',
-    'form.track_placeholder':   'Artiste — Titre',
+    'form.track_placeholder':   'Track — Artiste',
     'form.link_placeholder':    'Spotify, SoundCloud, YouTube…',
 
     /* Validation & erreurs */
@@ -49,6 +50,11 @@ const TRANSLATIONS = {
     'confirm.btn_second': 'Envoyer une 2ème track',
     'confirm.btn_other':  'Envoyer une track à une autre tracklist',
 
+    /* Modale limite */
+    'modal.limit_title': 'Limite atteinte',
+    'modal.limit_sub':   'Tu as déjà envoyé le maximum de tracks pour cette tracklist.',
+    'modal.back_home':   'Retour à l\'accueil',
+
     /* Footer */
     'footer': 'TRACKLIST © 2026 — Tous droits réservés',
 
@@ -67,6 +73,7 @@ const TRANSLATIONS = {
   en: {
     /* Nav */
     'nav.about': 'About Us',
+    'nav.close': 'Close',
 
     /* Submit */
     'back_btn':            '← Back',
@@ -78,7 +85,7 @@ const TRANSLATIONS = {
     'form.submit_btn':          'Send',
     'form.submitting':          'Sending…',
     'form.pseudo_placeholder':  'dj_shadow_fan',
-    'form.track_placeholder':   'Artist — Title',
+    'form.track_placeholder':   'Track — Artist',
     'form.link_placeholder':    'Spotify, SoundCloud, YouTube…',
 
     /* Validation & errors */
@@ -108,6 +115,11 @@ const TRANSLATIONS = {
     'confirm.limit':      "You've reached the limit of {max} tracks for this tracklist.",
     'confirm.btn_second': 'Send a 2nd track',
     'confirm.btn_other':  'Send a track to another tracklist',
+
+    /* Modal limit */
+    'modal.limit_title': 'Limit reached',
+    'modal.limit_sub':   "You've already sent the maximum tracks for this tracklist.",
+    'modal.back_home':   'Back to home',
 
     /* Footer */
     'footer': 'TRACKLIST © 2026 — All rights reserved',
@@ -169,7 +181,9 @@ function applyTranslations() {
     aboutBtn.textContent = t('nav.about');
   }
   document.querySelectorAll('.lang-option').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.lang === currentLang);
+    const isActive = btn.dataset.lang === currentLang;
+    btn.classList.toggle('active', isActive);
+    btn.setAttribute('aria-pressed', isActive);
   });
 }
 

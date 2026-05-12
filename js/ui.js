@@ -16,6 +16,7 @@ function showPage(name) {
     const isAbout = name === 'about';
     btn.textContent = isAbout ? '×' : t('nav.about');
     btn.classList.toggle('is-close', isAbout);
+    btn.setAttribute('aria-label', isAbout ? t('nav.close') : '');
   }
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
@@ -41,6 +42,29 @@ function goHome() {
   renderHome();
   showPage('home');
   if (!_restoringFromHistory) history.pushState({ page: 'home' }, '', '/');
+}
+
+/* ── SKELETON HOME ───────────────────────────────────────────── */
+
+function renderSkeleton(count) {
+  const grid = document.getElementById('tracklist-grid');
+  grid.innerHTML = '';
+  const n = count ?? TRACKLISTS.length;
+  Array.from({ length: n }).forEach(() => {
+    const card = document.createElement('div');
+    card.className = 'tracklist-card';
+    card.innerHTML = `
+      <div class="card-info">
+        <div class="skel skel-name"></div>
+        <div class="skel skel-tags"></div>
+        <div class="skel skel-dj"></div>
+      </div>
+      <div class="card-body skel-body"></div>
+      <div class="card-cta">
+        <div class="skel skel-btn"></div>
+      </div>`;
+    grid.appendChild(card);
+  });
 }
 
 /* ── HOME RENDER ─────────────────────────────────────────────── */

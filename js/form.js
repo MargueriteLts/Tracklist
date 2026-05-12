@@ -21,7 +21,7 @@ function openSubmit(tlId) {
   document.getElementById('submit-tracklist-name').textContent = tl.tracklistName;
   document.getElementById('submit-dj-tags').textContent        = tl.tags.map(t => '#' + t).join(' ');
   document.getElementById('submit-dj-name').textContent        = tl.mystery ? 'X X X X X' : (tl.djName || '');
-  const bio = (!tl.mystery && tl.djBio)
+  const bio = tl.djBio
     ? (typeof tl.djBio === 'object' ? (tl.djBio[currentLang] || tl.djBio.fr) : tl.djBio)
     : '';
   document.getElementById('submit-dj-bio').textContent = bio;
@@ -73,7 +73,6 @@ function validateForm() {
 
   const pseudo = document.getElementById('input-pseudo').value.trim();
   const track  = document.getElementById('input-track').value.trim();
-  const link   = document.getElementById('input-link').value.trim();
 
   if (!pseudo)                        { setError('pseudo', t('err.pseudo_required')); valid = false; }
   else if (pseudo.length < 2)         { setError('pseudo', t('err.pseudo_short'));    valid = false; }
@@ -82,13 +81,7 @@ function validateForm() {
   if (!track)              { setError('track', t('err.track_required')); valid = false; }
   else if (track.length < 3) { setError('track', t('err.track_short')); valid = false; }
 
-  if (link && !_isValidUrl(link)) { setError('link', t('err.link_invalid')); valid = false; }
-
   return valid;
-}
-
-function _isValidUrl(str) {
-  try { new URL(str); return true; } catch { return false; }
 }
 
 /* ── SOUMISSION ──────────────────────────────────────────────── */
@@ -105,7 +98,7 @@ function handleSubmit(e) {
 
   // Vérification côté client (double sécurité)
   if (getUserCount(currentTl.id) >= currentTl.maxTracks) {
-    alert(t('err.limit_local'));
+    showLimitModal();
     return;
   }
 
@@ -127,9 +120,8 @@ function handleSubmit(e) {
     const data = await res.json();
 
     if (res.status === 403 && data.error === 'limit_reached') {
-      alert(t('err.limit_server'));
       _setSubmitLoading(false);
-      goHome();
+      showLimitModal();
       return;
     }
 
@@ -213,8 +205,30 @@ function _showConfirmState(trackName, canSendMore) {
   document.getElementById('confirm-state').style.display = 'block';
 }
 
+function showLimitModal() {
+  document.getElementById('modal-sub').textContent =
+    t('modal.limit_sub', { max: currentTl ? currentTl.maxTracks : 2 });
+  document.getElementById('limit-modal').style.display = 'flex';
+}
+
+function hideLimitModal() {
+  document.getElementById('limit-modal').style.display = 'none';
+}
+
 function _setSubmitLoading(isLoading) {
   const btn = document.getElementById('btn-submit');
   btn.textContent = isLoading ? t('form.submitting') : t('form.submit_btn');
   btn.disabled    = isLoading;
+}
+
+/* ── TOOLTIP PSEUDO (toggle click/tap) ───────────────────────── */
+const _pseudoInfo = document.querySelector('.pseudo-info');
+if (_pseudoInfo) {
+  _pseudoInfo.addEventListener('click', function(e) {
+    this.classList.toggle('open');
+    e.stopPropagation();
+  });
+  document.addEventListener('click', function() {
+    _pseudoInfo.classList.remove('open');
+  });
 }
