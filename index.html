@@ -14,7 +14,13 @@
   <!-- NAV -->
   <nav id="nav">
     <span class="nav-logo" onclick="goHome()">tracklist</span>
-    <a class="nav-link" id="nav-about-btn" onclick="toggleAbout()">About Us</a>
+    <div class="nav-actions">
+      <div class="lang-toggle">
+        <button class="lang-option" data-lang="fr" onclick="setLang('fr')">FR</button>
+        <button class="lang-option" data-lang="en" onclick="setLang('en')">EN</button>
+      </div>
+      <button class="nav-link" id="nav-about-btn" onclick="toggleAbout()">À propos</button>
+    </div>
   </nav>
 
   <!-- PAGE : HOME -->
@@ -25,9 +31,9 @@
   </main>
 
   <!-- PAGE : SUBMIT -->
-  <main id="page-submit" class="page">
+  <section id="page-submit" class="page">
     <button class="back-btn" onclick="goHome()">
-      <span class="back-arrow">←</span> Retour
+      <span data-i18n="back_btn">← Retour</span>
     </button>
 
     <div class="submit-header">
@@ -54,29 +60,29 @@
         <div class="form-row">
           <div class="form-group">
             <label class="form-label" for="input-pseudo">
-              Ton pseudo
+              <span data-i18n="form.pseudo_label">Ton pseudo</span>
               <span class="pseudo-info">ⓘ
-                <span class="pseudo-tooltip">Ton pseudo sert à identifier tes soumissions.</span>
+                <span class="pseudo-tooltip" data-i18n="form.pseudo_tooltip">Ton pseudo sert à identifier tes soumissions.</span>
               </span>
             </label>
             <input class="form-input" id="input-pseudo" type="text"
-                   placeholder="dj_shadow_fan" autocomplete="off" />
+                   placeholder="dj_shadow_fan" data-i18n-placeholder="form.pseudo_placeholder" autocomplete="off" />
             <span class="field-error" id="error-pseudo"></span>
           </div>
           <div class="form-group">
-            <label class="form-label" for="input-track">Nom de la track & artiste</label>
+            <label class="form-label" for="input-track" data-i18n="form.track_label">Nom de la track & artiste</label>
             <input class="form-input" id="input-track" type="text"
-                   placeholder="Artiste — Titre" autocomplete="off" />
+                   placeholder="Artiste — Titre" data-i18n-placeholder="form.track_placeholder" autocomplete="off" />
             <span class="field-error" id="error-track"></span>
           </div>
         </div>
         <div class="form-row">
           <div class="form-group full">
             <label class="form-label" for="input-link">
-              Lien de streaming <span class="optional">(facultatif)</span>
+              <span data-i18n="form.link_label">Lien de streaming</span> <span class="optional" data-i18n="form.optional">(facultatif)</span>
             </label>
             <input class="form-input" id="input-link" type="url"
-                   placeholder="Spotify, SoundCloud, YouTube…" autocomplete="off" />
+                   placeholder="Spotify, SoundCloud, YouTube…" data-i18n-placeholder="form.link_placeholder" autocomplete="off" />
             <span class="field-error" id="error-link"></span>
           </div>
         </div>
@@ -84,9 +90,9 @@
           <div class="submit-limit-note" id="submit-limit-note"></div>
           <div class="track-counter" id="track-counter">1/2</div>
           <div class="form-actions">
-            <button type="submit" class="btn btn-solid" id="btn-submit">Envoyer</button>
+            <button type="submit" class="btn btn-solid" id="btn-submit" data-i18n="form.submit_btn">Envoyer</button>
           </div>
-          <div class="submit-deadline">Deadline : 26.05.26</div>
+          <div class="submit-deadline" data-i18n="deadline">Deadline : 26.05.26</div>
         </div>
       </form>
     </div>
@@ -101,37 +107,37 @@
         <div class="confirmation-actions" id="confirm-actions"></div>
       </div>
     </div>
-  </main>
+  </section>
 
   <!-- PAGE : ABOUT -->
-  <main id="page-about" class="page">
+  <section id="page-about" class="page">
     <div class="about-content">
 
       <div class="about-intro">
-        <p class="about-subtitle">La musique avant tout.<br>Avant les noms, avant les followers,<br> avant les algorithmes qui te dictent qui tu dois aller voir.</p>
-        <p class="about-subparagraph">Tracklist est né d'un constat simple : aujourd'hui le DJ est devenu une idole, omniprésente, non pas pour ses skills mais pour ses followers.<br> <span class="red-text">On regarde qui joue au lieu d'écouter ce qui est joué.</span></p>
+        <p class="about-subtitle" data-i18n-html="about.subtitle1">La musique avant tout.<br>Avant les noms, avant les followers,<br>avant les algorithmes qui te dictent qui tu&nbsp;dois&nbsp;aller&nbsp;voir.</p>
+        <p class="about-subparagraph" data-i18n-html="about.subparagraph">Tracklist est né d’un constat simple : aujourd’hui le DJ est devenu une idole, omniprésente, non pas pour ses skills mais pour ses followers.<br><span class="red-text">On regarde qui joue au lieu d’écouter ce qui est joué.</span></p>
       </div>
 
       <div class="about-columns">
-        <div class="about-col">La musique passe au second plan, les lighteux·ses sont oublié·es, le VJ a complètement disparu des line-ups et les producteur·ices restent dans l'ombre alors que leurs tracks circulent.</div>
-        <div class="about-col">Avec Tracklist, on veut inverser ça. Donner de la visibilité aux producteur·ices. Remettre en valeur l'art du VJing. Et replacer au centre ce qui compte : le savoir-faire du DJ — pas son compte Instagram. Pour nous, le DJ n'est pas une star intouchable. C'est un technicien, un artisan, un chimiste du son. Quelqu'un qui assemble, transforme, raconte une histoire avec les morceaux des autres. C'est ça qu'on veut mettre en avant.</div>
-        <div class="about-col">Mais surtout, le cœur du projet, c’est vous. Le public. Ceux qui digg, écoutent et dansent. Ceux qui ont des pépites anciennes comme récentes cachées dans leurs playlists et qui n’attendent qu’une chose : les partager. Tracklist, c’est donner un espace à ces morceaux, les faire sortir de l’ombre et les voir prendre vie entre les mains d’un DJ.</div>
-        <div class="about-col">Alors on a imaginé un concept simple: Le public propose des sons, on construit une tracklist collective, et un DJ a pour mission de la jouer, de la sublimer, de lui donner vie. Pas de zone de confort. Un challenge: composer avec vos choix, vos univers, vos surprises.</div>
-        <div class="about-col">Mais Tracklist ne s’arrête pas au son: on veut relancer le dialogue entre la musique et l’image en remettant le VJ aux côtés du DJ comme véritable partenaire de set. Chaque set est accompagné d’un visuel unique et devient une oeuvre double, sonore et visuelle. Une expérience complète, vivante et immersive, construite à deux.</div>
+        <div class="about-col" data-i18n="about.col1">La musique passe au second plan, les lighteux·ses sont oublié·es, le VJ a complètement disparu des line-ups et les producteur·ices restent dans l’ombre alors que leurs tracks circulent.</div>
+        <div class="about-col" data-i18n="about.col2">Avec Tracklist, on veut inverser ça. Donner de la visibilité aux producteur·ices. Remettre en valeur l’art du VJing. Et replacer au centre ce qui compte : le savoir-faire du DJ — pas son compte Instagram. C’est un technicien, un artisan, un chimiste du son.</div>
+        <div class="about-col" data-i18n="about.col3">Mais surtout, le cœur du projet, c’est vous. Le public. Ceux qui digg, écoutent et dansent. Ceux qui ont des pépites cachées dans leurs playlists et qui n’attendent qu’une chose : les partager.</div>
+        <div class="about-col" data-i18n="about.col4">Alors on a imaginé un concept simple : le public propose des sons, on construit une tracklist collective, et un DJ a pour mission de la jouer, de la sublimer, de lui donner vie. Pas de zone de confort.</div>
+        <div class="about-col" data-i18n="about.col5">Mais Tracklist ne s’arrête pas au son : on remet le VJ aux côtés du DJ comme véritable partenaire de set. Chaque set devient une œuvre double — sonore et visuelle.</div>
       </div>
 
       <div class="about-closing">
-        <p class="about-subtitle">Parce que la musique, c'est un échange.<br>Pas un monologue.</p>
+        <p class="about-subtitle" data-i18n-html="about.closing">Parce que la musique, c’est un échange.<br>Pas un monologue.</p>
       </div>
       <div class="about-infos">
-        <p>Vous pouvez soumettre jusqu'à 2 tracks, sans compte.<br> Votre pseudo sera affiché dans le visuel accompagnant le set si votre track a été choisie.</p>
+        <p data-i18n-html="about.infos">Vous pouvez soumettre jusqu’à 2 tracks, sans compte.<br>Votre pseudo sera affiché dans le visuel accompagnant le set si votre track a été choisie.</p>
       </div>
 
     </div>
-  </main>
+  </section>
 
   <footer>
-    TRACKLIST © 2026 — Tous droits réservés
+    <span data-i18n="footer">TRACKLIST © 2026 — Tous droits réservés</span>
   </footer>
 
   <!--
@@ -140,12 +146,14 @@
 
     data.js    → les données (TRACKLISTS)
     storage.js → lit/écrit localStorage, utilise rien d'autre
-    ui.js      → utilise TRACKLISTS + storage.js
+    i18n.js    → traductions FR/EN, doit être chargé avant ui.js et form.js
+    ui.js      → utilise TRACKLISTS + storage.js + i18n.js
     form.js    → utilise TRACKLISTS + storage.js + ui.js (showPage, goHome)
     main.js    → initialise tout, utilise storage.js + ui.js
   -->
   <script src="js/data.js"></script>
   <script src="js/storage.js"></script>
+  <script src="js/i18n.js"></script>
   <script src="js/ui.js"></script>
   <script src="js/form.js"></script>
   <script src="js/main.js"></script>

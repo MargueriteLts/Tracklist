@@ -4,17 +4,27 @@
 
 let currentTl = null;
 
-getOrCreateUID();
-
 // Charge les compteurs depuis Airtable avant de rendre la home
-fetch('/.netlify/functions/counts')
+const uid = getOrCreateUID();
+fetch(`/.netlify/functions/counts?uid=${encodeURIComponent(uid)}`)
   .then(r => r.json())
   .then(data => {
     const counts = data.counts || {};
-    // Met à jour currentTotal pour chaque tracklist
     TRACKLISTS.forEach(tl => {
-      if (counts[tl.id] !== undefined) {
-        tl.currentTotal = counts[tl.id];
+      tl.currentTotal = counts[tl.id] ?? 0;
+    });
+
+    // Mémorise les comptes Airtable (source de vérité côté serveur)
+    const userCounts = data.userCounts || {};
+    TRACKLISTS.forEach(tl => {
+      setServerCount(tl.id, userCounts[tl.id] || 0);
+    });
+
+    // Nettoie les soumissions locales si supprimées dans Airtable (mais garde lastPseudo)
+    TRACKLISTS.forEach(tl => {
+      const localSubmissions = loadData().submissions?.[tl.id]?.length ?? 0;
+      if (localSubmissions > 0 && !userCounts[tl.id]) {
+        clearSubmissions(tl.id);
       }
     });
   })

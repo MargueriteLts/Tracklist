@@ -8,7 +8,10 @@ const TRACKLISTS = [
     id: 'tl1',
     tracklistName: 'TRACKLIST 1',
     djName: 'NAME OF DJ1',
-    djBio: 'Une bio courte qui décrit la vibe musicale du DJ — son univers, ses influences, l\'énergie qu\'il apporte.',
+    djBio: {
+      fr: 'Une bio courte qui décrit la vibe musicale du DJ — son univers, ses influences, l\'énergie qu\'il apporte.',
+      en: 'A short bio describing the DJ\'s musical vibe — their world, their influences, the energy they bring.',
+    },
     tags: ['hardgroove', 'solaire'],
     photo: null,           // Chemin vers la photo, ex: 'photos/dj1.jpg'
     maxTracks: 2,          // Nb max de tracks par utilisateur
@@ -20,7 +23,10 @@ const TRACKLISTS = [
     id: 'tl2',
     tracklistName: 'TRACKLIST 2',
     djName: 'NAME OF DJ2',
-    djBio: 'Une bio courte qui décrit la vibe musicale du DJ — son univers, ses influences, l\'énergie qu\'il apporte.',
+    djBio: {
+      fr: 'Une bio courte qui décrit la vibe musicale du DJ — son univers, ses influences, l\'énergie qu\'il apporte.',
+      en: 'A short bio describing the DJ\'s musical vibe — their world, their influences, the energy they bring.',
+    },
     tags: ['trance', 'bouncy', 'funky'],
     photo: null,
     maxTracks: 2,

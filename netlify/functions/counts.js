@@ -21,13 +21,16 @@ exports.handler = async (event) => {
     return { statusCode: 204, headers: cors, body: '' };
   }
 
-  // Récupère tous les enregistrements (champ tracklist_id uniquement)
+  const uid = event.queryStringParameters?.uid || null;
+
+  // Récupère tous les enregistrements avec tracklist_id et uid
   let records = [];
   let offset = null;
 
   do {
     const url = new URL(AIRTABLE_API);
-    url.searchParams.set('fields[]', 'tracklist_id');
+    url.searchParams.append('fields[]', 'tracklist_id');
+    url.searchParams.append('fields[]', 'uid');
     if (offset) url.searchParams.set('offset', offset);
 
     const res = await fetch(url.toString(), { headers });
@@ -41,19 +44,28 @@ exports.handler = async (event) => {
 
     const data = await res.json();
     records = records.concat(data.records);
-    offset = data.offset; // null si dernière page
+    offset = data.offset;
   } while (offset);
 
-  // Compte par tracklist_id
+  // Compte global par tracklist_id + compte par uid si fourni
   const counts = {};
+  const userCounts = {};
+
   records.forEach(r => {
-    const id = r.fields.tracklist_id;
-    if (id) counts[id] = (counts[id] || 0) + 1;
+    const tlId = r.fields.tracklist_id;
+    if (!tlId) return;
+    counts[tlId] = (counts[tlId] || 0) + 1;
+    if (uid && r.fields.uid === uid) {
+      userCounts[tlId] = (userCounts[tlId] || 0) + 1;
+    }
   });
+
+  const response = { counts };
+  if (uid) response.userCounts = userCounts;
 
   return {
     statusCode: 200,
     headers: cors,
-    body: JSON.stringify({ counts }),
+    body: JSON.stringify(response),
   };
 };

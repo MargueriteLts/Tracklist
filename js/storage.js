@@ -45,10 +45,22 @@ function saveData(data) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 }
 
-/* Retourne le nombre de tracks envoyées par cet utilisateur pour une tracklist */
+/* Retourne le nombre de tracks envoyées par cet utilisateur pour une tracklist.
+   Prend le max entre le localStorage et le dernier compte confirmé par Airtable,
+   pour rester cohérent dans les deux sens (suppression ou restauration dans Airtable). */
 function getUserCount(tlId) {
   const data = loadData();
-  return data.submissions?.[tlId]?.length ?? 0;
+  const localCount  = data.submissions?.[tlId]?.length ?? 0;
+  const serverCount = data.serverCounts?.[tlId] ?? 0;
+  return Math.max(localCount, serverCount);
+}
+
+/* Mémorise le nombre de soumissions confirmées par Airtable pour une tracklist */
+function setServerCount(tlId, count) {
+  const data = loadData();
+  if (!data.serverCounts) data.serverCounts = {};
+  data.serverCounts[tlId] = count;
+  saveData(data);
 }
 
 /* Enregistre une soumission localement */
@@ -59,6 +71,15 @@ function recordSubmission(tlId, pseudo, trackName, link) {
   data.submissions[tlId].push({ pseudo, trackName, link, ts: Date.now() });
   data.lastPseudo = pseudo;
   saveData(data);
+}
+
+/* Supprime les soumissions d'une tracklist du localStorage */
+function clearSubmissions(tlId) {
+  const data = loadData();
+  if (data.submissions?.[tlId]) {
+    delete data.submissions[tlId];
+    saveData(data);
+  }
 }
 
 /* Retourne le dernier pseudo utilisé (pour pré-remplir le champ) */

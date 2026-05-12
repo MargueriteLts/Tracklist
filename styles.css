@@ -18,7 +18,6 @@
   --text:          #f0f0f0;
   --text-muted:    #5f5f5f;
   --text-dim:      #868686;
-  /*--text-dim:      #c6c6c6;*/
   --progress-bg:   #2a2a2a;
   --progress-fill: #d0d0d0;
   --error:         #ff6b6b;
@@ -41,7 +40,6 @@
   --font-secondary: var(--font-body);
 
   /* ── Typography — sizes ──────────────────────────────────── */
-  /*--fs-hero:   clamp(52px, 7vw, 80px);   Page hero / tracklist name/*/
   --fs-xl:     clamp(40px, 5vw, 64px);   /* Submit tracklist name */
   --fs-h1:     50px;                      /* Nav logo */
   --fs-h2:     22px;                      /* Section headings, counter, tracklist name main page */
@@ -86,6 +84,7 @@ body {
   font-family: var(--font-body);
   font-size: var(--fs-body);
   height: 100vh;
+  height: 100dvh;
   width: 100vw;
   overflow: hidden;
   display: flex;
@@ -94,7 +93,6 @@ body {
 }
 
 .red-text {
-  /*color: var(--brandred);*/
   border-bottom: 1px solid var(--brandred);
 }
 
@@ -126,9 +124,52 @@ nav.scrolled { border-color: var(--border); }
   cursor: pointer;
 }
 
+.nav-logo:hover {
+  color: var(--brandred)
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.lang-toggle {
+  display: flex;
+  align-items: center;
+  background: var(--surface-hi);
+  border-radius: 999px;
+  padding: 3px;
+}
+
+.lang-option {
+  font-family: var(--font-display);
+  font-size: var(--fs-ui);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--ls-snug);
+  text-transform: uppercase;
+  color: var(--text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 10px;
+  border-radius: 999px;
+  transition: background var(--transition), color var(--transition);
+}
+
+.lang-option.active {
+  background: var(--text);
+  color: var(--bg);
+}
+
+.lang-option:not(.active):hover { color: var(--brandred); }
+
 .nav-link {
   font-family: var(--font-display);
   font-size: var(--fs-nav);
+  background: none;
+  border: none;
+  padding: 0;
   font-weight: var(--fw-medium);
   letter-spacing: var(--ls-snug);
   text-transform: uppercase;
@@ -152,6 +193,7 @@ nav.scrolled { border-color: var(--border); }
 
 /* ── HOME ────────────────────────────────────────────────────── */
 #page-home {
+  position: relative;
   justify-content: safe center;
   align-items: center;
   padding: 36px 40px;
@@ -160,7 +202,29 @@ nav.scrolled { border-color: var(--border); }
   overflow-y: auto;
 }
 
+#page-home::before {
+  content: 'NO STARS.\A JUST TRACKS.';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-display);
+  font-size: 220px;
+  font-weight: var(--fw-black);
+  letter-spacing: var(--ls-tight);
+  text-transform: uppercase;
+  color: #262626;
+  white-space: pre;
+  text-align: center;
+  pointer-events: none;
+  z-index: 0;
+  user-select: none;
+  line-height: 400px;
+}
+
 .tracklist-grid {
+  position: relative;
+  z-index: 1;
   display: flex;
   gap: 64px;
   justify-content: center;
@@ -300,8 +364,11 @@ nav.scrolled { border-color: var(--border); }
 
 /* Card CTA */
 .card-cta {
+  display: flex;
+  flex-direction: column;
   margin-top: 14px;
   width: 100%;
+  justify-content: center;
 }
 
 /* Deadline label — under card CTA */
@@ -311,7 +378,7 @@ nav.scrolled { border-color: var(--border); }
   font-weight: var(--fw-regular);
   letter-spacing: var(--ls-wide);
   text-transform: uppercase;
-  color: var(--text-muted);
+  color: var(--text-dim);
   text-align: center;
   margin-top: 10px;
 }
@@ -339,10 +406,9 @@ nav.scrolled { border-color: var(--border); }
   background: transparent;
   color: var(--text);
   padding: 11px 20px;
-  /*width: 100%;*/
 }
 .btn-outline:hover:not(:disabled) {
-  border-color: var(--brandred);
+  border-color: var(--text);
   background: rgba(255,255,255,0.04);
 }
 .btn-outline:disabled {
@@ -356,7 +422,9 @@ nav.scrolled { border-color: var(--border); }
   color: var(--bg);
   padding: 12px 32px;
 }
-.btn-solid:hover { background: #d4d4d4; }
+.btn-solid:hover {
+  background: #d4d4d4;
+}
 
 .btn-ghost {
   border: 1px solid var(--border);
@@ -383,7 +451,7 @@ nav.scrolled { border-color: var(--border); }
   font-weight: var(--fw-medium);
   letter-spacing: var(--ls-normal);
   text-transform: uppercase;
-  color: var(--text-muted);
+  color: var(--text-dim);
   text-align: center;
   padding: 11px 0;
 }
@@ -405,8 +473,8 @@ nav.scrolled { border-color: var(--border); }
   gap: 10px;
   font-family: var(--font-body);
   font-size: var(--fs-label);
-  font-weight: var(--fw-regular);
-  letter-spacing: var(--ls-wider);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--ls-normal);
   text-transform: uppercase;
   color: var(--text-muted);
   cursor: pointer;
@@ -415,8 +483,7 @@ nav.scrolled { border-color: var(--border); }
   background: none;
   padding: 12px 0;
 }
-.back-btn:hover { color: var(--text); }
-.back-arrow { font-size: var(--fs-ui); }
+.back-btn:hover { color: var(--brandred); }
 
 /* Submit header */
 .submit-header {
@@ -639,7 +706,6 @@ nav.scrolled { border-color: var(--border); }
   font-weight: var(--fw-boldX);
   letter-spacing: var(--ls-snug);
   color: var(--text);
-  /*margin: 20px 0 14px;*/
 }
 
 /* Form actions */
@@ -702,6 +768,7 @@ nav.scrolled { border-color: var(--border); }
 
 /* ── ABOUT PAGE ──────────────────────────────────────────────── */
 #page-about {
+  position: relative;
   justify-content: safe center;
   align-items: center;
   padding: 0 48px 28px 48px;
@@ -710,9 +777,30 @@ nav.scrolled { border-color: var(--border); }
   overflow-y: auto;
 }
 
+#page-about::before {
+  content: 'NO STARS.\A JUST TRACKS.';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-display);
+  font-size: 220px;
+  font-weight: var(--fw-black);
+  letter-spacing: var(--ls-tight);
+  text-transform: uppercase;
+  color: #262626;
+  white-space: pre;
+  text-align: center;
+  pointer-events: none;
+  z-index: 0;
+  user-select: none;
+  line-height: 400px;
+}
+
 .about-content {
+  position: relative;
+  z-index: 1;
   width: 100%;
-  /*max-width: 1200px;*/
   animation: fadeUp 0.4s ease both;
   display: flex;
   flex-direction: column;
@@ -730,7 +818,6 @@ nav.scrolled { border-color: var(--border); }
 
 .about-subtitle {
   font-family: var(--font-display);
-  /*font-size: var(--fs-h2);*/
   font-size: var(--fs-xl);
   font-weight: var(--fw-boldX);
   letter-spacing: var(--ls-normal);
@@ -741,7 +828,6 @@ nav.scrolled { border-color: var(--border); }
 .about-closing .about-subtitle {
   font-size: var(--fs-h3);
   font-weight: var(--fw-medium);
-  /*color: var(--text-dim);*/
 }
 
 .about-columns {
@@ -761,12 +847,10 @@ nav.scrolled { border-color: var(--border); }
 
 .about-subparagraph {
   font-family: var(--font-body);
-  /*font-size: var(--fs-body);*/
   font-size: var(--fs-h3);
   font-weight: var(--fw-medium);
   letter-spacing: var(--ls-normal);
   color: var(--text);
-  /*text-transform: uppercase;*/
 }
 
 .about-infos {
@@ -791,23 +875,26 @@ footer {
   border-top: 1px solid var(--border);
   flex-shrink: 0;
   margin-top: auto;
-  /*margin-bottom: auto;*/
 }
 
 /* ── RESPONSIVE ──────────────────────────────────────────────── */
 @media (max-width: 680px) {
-  nav { padding: 16px 24px; }
-  .nav-logo { font-size: 24px; }
+  nav { padding: 14px 20px; }
+  .nav-logo { font-size: 20px; }
+  .nav-actions { gap: 12px; }
+  .nav-link { font-size: 14px; }
 
-  #page-home { padding: 28px 24px; }
+  #page-home { padding: 24px 20px; }
   .tracklist-grid { gap: 40px; }
   .tracklist-card { width: 100%; max-width: 300px; }
 
-  #page-submit { padding: 0 24px 32px; }
+  #page-submit { padding: 0 20px 28px; }
+  .submit-header { margin-bottom: 48px; }
   .form-row { grid-template-columns: 1fr; gap: 16px; }
 
-  #page-about { padding: 28px 24px; }
-  .about-columns { grid-template-columns: 1fr; overflow-y: auto; }
+  #page-about { padding: 24px 20px; }
+  .about-content { gap: 40px; }
+  .about-columns { grid-template-columns: 1fr; }
 
-  footer { padding: 12px 24px; }
+  footer { padding: 12px 20px; }
 }

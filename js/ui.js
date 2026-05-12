@@ -14,7 +14,7 @@ function showPage(name) {
   const btn = document.getElementById('nav-about-btn');
   if (btn) {
     const isAbout = name === 'about';
-    btn.textContent = isAbout ? '×' : 'About Us';
+    btn.textContent = isAbout ? '×' : t('nav.about');
     btn.classList.toggle('is-close', isAbout);
   }
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -87,13 +87,13 @@ function _buildCardHTML({ tl, isFull, userDone, userCount, progressPct, effectiv
 
   let ctaHtml;
   if (isFull) {
-    ctaHtml = `<div class="sent-label sent-label--full">Tracklist complète</div>`;
+    ctaHtml = `<div class="sent-label sent-label--full">${t('card.full_cta')}</div>`;
   } else if (userDone) {
-    ctaHtml = `<div class="sent-label">${tl.maxTracks}/${tl.maxTracks} tracks envoyées</div>`;
+    ctaHtml = `<div class="sent-label">${t('card.sent', { max: tl.maxTracks })}</div>`;
   } else {
     ctaHtml = `
       <button class="btn btn-outline" onclick="openSubmit('${tl.id}')">
-        Envoyer des tracks
+        ${t('card.send_btn')}
         <span class="btn-counter">${userCount}/${effectiveMax}</span>
       </button>`;
   }
@@ -110,6 +110,6 @@ function _buildCardHTML({ tl, isFull, userDone, userCount, progressPct, effectiv
     <div class="card-cta">
       ${progressHtml}
       ${ctaHtml}
-      <div class="deadline-label">Deadline : 26.05.26</div>
+      <div class="deadline-label">${t('deadline')}</div>
     </div>`;
 }

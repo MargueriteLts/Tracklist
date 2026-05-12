@@ -21,7 +21,10 @@ function openSubmit(tlId) {
   document.getElementById('submit-tracklist-name').textContent = tl.tracklistName;
   document.getElementById('submit-dj-tags').textContent        = tl.tags.map(t => '#' + t).join(' ');
   document.getElementById('submit-dj-name').textContent        = tl.mystery ? 'X X X X X' : (tl.djName || '');
-  document.getElementById('submit-dj-bio').textContent         = (!tl.mystery && tl.djBio) ? tl.djBio : '';
+  const bio = (!tl.mystery && tl.djBio)
+    ? (typeof tl.djBio === 'object' ? (tl.djBio[currentLang] || tl.djBio.fr) : tl.djBio)
+    : '';
+  document.getElementById('submit-dj-bio').textContent = bio;
 
   const photoEl = document.getElementById('submit-dj-photo');
   if (tl.mystery) {
@@ -33,8 +36,8 @@ function openSubmit(tlId) {
 
   // Message de limite adapté au contexte
   document.getElementById('submit-limit-note').textContent = spotsLeft === 1
-    ? 'Il ne reste qu\'une place dans cette tracklist — tu ne peux envoyer qu\'une seule track.'
-    : `Tu peux envoyer maximum ${tl.maxTracks} track${tl.maxTracks > 1 ? 's' : ''} sur cette tracklist`;
+    ? t('limit.single')
+    : t('limit.plural', { max: tl.maxTracks, s: tl.maxTracks > 1 ? 's' : '' });
 
   // Compteur de track (ex: "1/2" ou "2/2")
   document.getElementById('track-counter').textContent = `${userCount + 1}/${effectiveMax}`;
@@ -72,13 +75,14 @@ function validateForm() {
   const track  = document.getElementById('input-track').value.trim();
   const link   = document.getElementById('input-link').value.trim();
 
-  if (!pseudo)              { setError('pseudo', 'Ton pseudo est requis.'); valid = false; }
-  else if (pseudo.length < 2) { setError('pseudo', 'Minimum 2 caractères.'); valid = false; }
+  if (!pseudo)                        { setError('pseudo', t('err.pseudo_required')); valid = false; }
+  else if (pseudo.length < 2)         { setError('pseudo', t('err.pseudo_short'));    valid = false; }
+  else if (/["\\{}]/.test(pseudo))    { setError('pseudo', t('err.pseudo_chars'));    valid = false; }
 
-  if (!track)              { setError('track', "Indique le nom de la track et de l'artiste."); valid = false; }
-  else if (track.length < 3) { setError('track', 'Minimum 3 caractères.'); valid = false; }
+  if (!track)              { setError('track', t('err.track_required')); valid = false; }
+  else if (track.length < 3) { setError('track', t('err.track_short')); valid = false; }
 
-  if (link && !_isValidUrl(link)) { setError('link', 'Le lien ne semble pas valide.'); valid = false; }
+  if (link && !_isValidUrl(link)) { setError('link', t('err.link_invalid')); valid = false; }
 
   return valid;
 }
@@ -101,20 +105,17 @@ function handleSubmit(e) {
 
   // Vérification côté client (double sécurité)
   if (getUserCount(currentTl.id) >= currentTl.maxTracks) {
-    alert('Tu as déjà envoyé le maximum de tracks pour cette tracklist.');
+    alert(t('err.limit_local'));
     return;
   }
 
   _setSubmitLoading(true);
 
-  // ── ENVOI VERS LE BACKEND ────────────────────────────────
-  // Décommente et configure ce bloc quand Airtable est prêt :
-
   fetch('/.netlify/functions/submit', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      uid:            getOrCreateUID(),
+      uid,
       tracklist_id:   currentTl.id,
       tracklist_name: currentTl.tracklistName,
       pseudo,
@@ -126,7 +127,7 @@ function handleSubmit(e) {
     const data = await res.json();
 
     if (res.status === 403 && data.error === 'limit_reached') {
-      alert('Tu as déjà atteint la limite pour cette tracklist.');
+      alert(t('err.limit_server'));
       _setSubmitLoading(false);
       goHome();
       return;
@@ -158,7 +159,7 @@ function onSubmitSuccess(pseudo, trackName, link) {
 
 function onSubmitError() {
   _setSubmitLoading(false);
-  setError('track', 'Une erreur est survenue. Réessaie dans un instant.');
+  setError('track', t('err.submit_failed'));
 }
 
 /* ── 2ÈME SOUMISSION (même tracklist) ───────────────────────── */
@@ -185,11 +186,11 @@ function _showFormState() {
 }
 
 function _showConfirmState(trackName, canSendMore) {
-  document.getElementById('confirm-title').textContent      = 'Track envoyée !';
+  document.getElementById('confirm-title').textContent      = t('confirm.title');
   document.getElementById('confirm-track-name').textContent = `« ${trackName} »`;
   document.getElementById('confirm-sub').textContent        = canSendMore
-    ? 'Tu peux encore envoyer une track à cette tracklist.'
-    : `Tu as atteint la limite de ${currentTl.maxTracks} tracks pour cette tracklist.`;
+    ? t('confirm.can_more')
+    : t('confirm.limit', { max: currentTl.maxTracks });
 
   const actionsEl = document.getElementById('confirm-actions');
   actionsEl.innerHTML = '';
@@ -197,14 +198,14 @@ function _showConfirmState(trackName, canSendMore) {
   if (canSendMore) {
     const btn1       = document.createElement('button');
     btn1.className   = 'btn btn-solid';
-    btn1.textContent = 'Envoyer une 2ème track';
+    btn1.textContent = t('confirm.btn_second');
     btn1.onclick     = () => openSubmitSecond();
     actionsEl.appendChild(btn1);
   }
 
   const btn2       = document.createElement('button');
   btn2.className   = canSendMore ? 'btn btn-ghost' : 'btn btn-outline';
-  btn2.textContent = 'Envoyer une track à une autre tracklist';
+  btn2.textContent = t('confirm.btn_other');
   btn2.onclick     = () => goHome();
   actionsEl.appendChild(btn2);
 
@@ -214,6 +215,6 @@ function _showConfirmState(trackName, canSendMore) {
 
 function _setSubmitLoading(isLoading) {
   const btn = document.getElementById('btn-submit');
-  btn.textContent = isLoading ? 'Envoi…' : 'Envoyer';
+  btn.textContent = isLoading ? t('form.submitting') : t('form.submit_btn');
   btn.disabled    = isLoading;
 }

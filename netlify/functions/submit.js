@@ -4,6 +4,7 @@ const AIRTABLE_TOKEN   = process.env.AIRTABLE_TOKEN;
 const AIRTABLE_BASE_ID = process.env.AIRTABLE_BASE_ID;
 const AIRTABLE_TABLE   = process.env.AIRTABLE_TABLE_ID;
 const MAX_PER_USER     = 2;
+const VALID_TRACKLIST_IDS = new Set(['tl1', 'tl2', 'tl3']);
 
 const AIRTABLE_API = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE}`;
 
@@ -52,6 +53,14 @@ exports.handler = async (event) => {
     };
   }
 
+  if (!VALID_TRACKLIST_IDS.has(tracklist_id)) {
+    return {
+      statusCode: 400,
+      headers: cors,
+      body: JSON.stringify({ error: 'Invalid tracklist_id' }),
+    };
+  }
+
   // ── VÉRIFICATION AUTHORITATIVE ────────────────────────────
   // Compte les soumissions existantes pour cet uid + tracklist
   //const filterFormula = encodeURIComponent(
@@ -83,6 +92,24 @@ exports.handler = async (event) => {
   //    }),
   //  };
   //}
+
+  // Validation des longueurs
+  if (pseudo.length > 50 || track.length > 200 || (link && link.length > 500)) {
+    return {
+      statusCode: 400,
+      headers: cors,
+      body: JSON.stringify({ error: 'Fields too long' }),
+    };
+  }
+
+  // Caractères interdits dans le pseudo (protège les formules Airtable)
+  if (/["\\{}]/.test(pseudo)) {
+    return {
+      statusCode: 400,
+      headers: cors,
+      body: JSON.stringify({ error: 'Invalid characters in pseudo' }),
+    };
+  }
 
   // Vérification par uid ET par pseudo
   const filterUid = encodeURIComponent(
@@ -127,6 +154,9 @@ exports.handler = async (event) => {
   }
 
   // ── INSERTION ─────────────────────────────────────────────
+  // Note : le check et l'insert ne sont pas atomiques (limite Airtable).
+  // Deux requêtes simultanées du même UID peuvent toutes deux passer le check.
+  // Risque acceptable pour ce volume de trafic ; résoudre nécessiterait une DB SQL.
   const insertRes = await fetch(AIRTABLE_API, {
     method: 'POST',
     headers,
