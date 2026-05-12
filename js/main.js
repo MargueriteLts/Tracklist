@@ -24,4 +24,38 @@ fetch('/.netlify/functions/counts')
   })
   .finally(() => {
     renderHome();
+
+    const path = window.location.pathname;
+    if (path === '/about') {
+      history.replaceState({ page: 'about' }, '', '/about');
+      showPage('about');
+    } else if (path.startsWith('/submit/')) {
+      const id = path.slice('/submit/'.length);
+      const tl = TRACKLISTS.find(t => t.id === id);
+      if (tl) {
+        history.replaceState({ page: 'submit', tlId: id }, '', path);
+        _restoringFromHistory = true;
+        openSubmit(id);
+        _restoringFromHistory = false;
+      } else {
+        history.replaceState({ page: 'home' }, '', '/');
+      }
+    } else {
+      history.replaceState({ page: 'home' }, '', '/');
+    }
   });
+
+window.addEventListener('popstate', e => {
+  _restoringFromHistory = true;
+  const state = e.state || { page: 'home' };
+  if (state.page === 'submit' && state.tlId) {
+    openSubmit(state.tlId);
+  } else if (state.page === 'about') {
+    showPage('about');
+  } else {
+    currentTl = null;
+    renderHome();
+    showPage('home');
+  }
+  _restoringFromHistory = false;
+});

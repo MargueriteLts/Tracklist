@@ -5,16 +5,42 @@
 
 /* ── NAVIGATION ─────────────────────────────────────────────── */
 
+let previousPage = 'home';
+let _restoringFromHistory = false;
+
 function showPage(name) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-' + name).classList.add('active');
+  const btn = document.getElementById('nav-about-btn');
+  if (btn) {
+    const isAbout = name === 'about';
+    btn.textContent = isAbout ? '×' : 'About Us';
+    btn.classList.toggle('is-close', isAbout);
+  }
   window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function toggleAbout() {
+  const isAbout = document.getElementById('page-about').classList.contains('active');
+  if (isAbout) {
+    showPage(previousPage);
+    if (!_restoringFromHistory) {
+      const url = previousPage === 'submit' && currentTl ? `/submit/${currentTl.id}` : '/';
+      history.pushState({ page: previousPage, tlId: currentTl ? currentTl.id : null }, '', url);
+    }
+  } else {
+    const active = document.querySelector('.page.active');
+    previousPage = active ? active.id.replace('page-', '') : 'home';
+    showPage('about');
+    if (!_restoringFromHistory) history.pushState({ page: 'about' }, '', '/about');
+  }
 }
 
 function goHome() {
   currentTl = null;
   renderHome();
   showPage('home');
+  if (!_restoringFromHistory) history.pushState({ page: 'home' }, '', '/');
 }
 
 /* ── HOME RENDER ─────────────────────────────────────────────── */
@@ -41,7 +67,7 @@ function renderHome() {
 /* Construit le HTML d'une carte (fonction privée, préfixe _) */
 function _buildCardHTML({ tl, isFull, userDone, userCount, progressPct, effectiveMax }) {
   const progressHtml = isFull
-    ? `<div class="card-full-label">Tracklist Complète</div>`
+    ? ''
     : `<div class="progress-wrap-row">
          <div class="progress-wrap">
            <div class="progress-bar" style="width:${progressPct}%"></div>
@@ -54,14 +80,14 @@ function _buildCardHTML({ tl, isFull, userDone, userCount, progressPct, effectiv
     : `<div class="card-placeholder"></div>`;
 
   const nameHtml = tl.mystery
-    ? `<div class="dj-name" style="letter-spacing:0.25em; color:var(--text-muted)">X X X X X</div>`
-    : `<div class="dj-name">${tl.djName}</div>`;
+    ? `<div class="dj-name dj-name--mystery">X X X X X</div>`
+    : `<div class="dj-name">${tl.djName || ''}</div>`;
 
   const tagsHtml = `<div class="dj-tags">${tl.tags.map(t => '#' + t).join(' ')}</div>`;
 
   let ctaHtml;
   if (isFull) {
-    ctaHtml = `<div class="sent-label" style="color:var(--text-dim)">Tracklist complète</div>`;
+    ctaHtml = `<div class="sent-label sent-label--full">Tracklist complète</div>`;
   } else if (userDone) {
     ctaHtml = `<div class="sent-label">${tl.maxTracks}/${tl.maxTracks} tracks envoyées</div>`;
   } else {
@@ -73,23 +99,17 @@ function _buildCardHTML({ tl, isFull, userDone, userCount, progressPct, effectiv
   }
 
   return `
-    ${progressHtml}
-    <div class="card-body">
-      ${photoHtml}
-    </div>
     <div class="card-info">
       <div class="tracklist-name">${tl.tracklistName}</div>
       ${tagsHtml}
       ${nameHtml}
     </div>
+    <div class="card-body">
+      ${photoHtml}
+    </div>
     <div class="card-cta">
+      ${progressHtml}
       ${ctaHtml}
       <div class="deadline-label">Deadline : 26.05.26</div>
     </div>`;
 }
-
-/* ── NAV SCROLL EFFECT ───────────────────────────────────────── */
-
-window.addEventListener('scroll', () => {
-  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 10);
-});

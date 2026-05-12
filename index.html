@@ -6,15 +6,15 @@
   <title>TRACKLIST</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="stylesheet" href="https://use.typekit.net/max7mrn.css" />
-  <link rel="stylesheet" href="tracklist.css" />
+  <link rel="stylesheet" href="https://use.typekit.net/yny6zqk.css" />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
   <!-- NAV -->
   <nav id="nav">
-    <span class="nav-logo" onclick="goHome()">TRACKLIST</span>
-    <a class="nav-link" onclick="showPage('about')">About Us</a>
+    <span class="nav-logo" onclick="goHome()">tracklist</span>
+    <a class="nav-link" id="nav-about-btn" onclick="toggleAbout()">About Us</a>
   </nav>
 
   <!-- PAGE : HOME -->
@@ -31,8 +31,7 @@
     </button>
 
     <div class="submit-header">
-      <div class="submit-deadline">Deadline : 26.05.26</div>
-      <div class="progress-wrap-row" style="width:240px; margin:0 auto 28px;">
+      <div class="progress-wrap-row">
         <div class="submit-progress-wrap">
           <div class="progress-bar" id="submit-progress-bar" style="width:0%"></div>
         </div>
@@ -40,9 +39,13 @@
       </div>
       <div class="submit-tracklist-name" id="submit-tracklist-name"></div>
       <div class="submit-dj-tags"        id="submit-dj-tags"></div>
-      <div class="submit-dj-name"        id="submit-dj-name"></div>
-      <div class="submit-dj-bio"         id="submit-dj-bio"></div>
-      <div class="submit-limit-note"     id="submit-limit-note"></div>
+      <div class="submit-dj-profile">
+        <div class="dj-photo" id="submit-dj-photo"></div>
+        <div class="dj-profile-text">
+          <div id="submit-dj-name"></div>
+          <div class="submit-dj-bio" id="submit-dj-bio"></div>
+        </div>
+      </div>
     </div>
 
     <!-- ÉTAT : FORMULAIRE -->
@@ -77,9 +80,13 @@
             <span class="field-error" id="error-link"></span>
           </div>
         </div>
-        <div class="track-counter" id="track-counter">1/2</div>
-        <div class="form-actions">
-          <button type="submit" class="btn btn-solid" id="btn-submit">Envoyer</button>
+        <div class="form-submit-context">
+          <div class="submit-limit-note" id="submit-limit-note"></div>
+          <div class="track-counter" id="track-counter">1/2</div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-solid" id="btn-submit">Envoyer</button>
+          </div>
+          <div class="submit-deadline">Deadline : 26.05.26</div>
         </div>
       </form>
     </div>
@@ -99,12 +106,27 @@
   <!-- PAGE : ABOUT -->
   <main id="page-about" class="page">
     <div class="about-content">
-      <div class="about-title">About</div>
-      <div class="about-text">
-        <p>Tracklist est un concept participatif : chaque tracklist est construite à partir de vos propositions. Les DJs sélectionnent, assemblent, et diffusent.</p>
-        <p>Vous pouvez soumettre jusqu'à 2 tracks par tracklist. Pas de compte nécessaire — juste votre pseudo et votre sélection musicale.</p>
-        <p>Les sets sont enregistrés en session radio privée, et les événements accueillent un public intentionnel de moins de 180 personnes.</p>
+
+      <div class="about-intro">
+        <p class="about-subtitle">La musique avant tout.<br>Avant les noms, avant les followers,<br> avant les algorithmes qui te dictent qui tu dois aller voir.</p>
+        <p class="about-subparagraph">Tracklist est né d'un constat simple : aujourd'hui le DJ est devenu une idole, omniprésente, non pas pour ses skills mais pour ses followers.<br> <span class="red-text">On regarde qui joue au lieu d'écouter ce qui est joué.</span></p>
       </div>
+
+      <div class="about-columns">
+        <div class="about-col">La musique passe au second plan, les lighteux·ses sont oublié·es, le VJ a complètement disparu des line-ups et les producteur·ices restent dans l'ombre alors que leurs tracks circulent.</div>
+        <div class="about-col">Avec Tracklist, on veut inverser ça. Donner de la visibilité aux producteur·ices. Remettre en valeur l'art du VJing. Et replacer au centre ce qui compte : le savoir-faire du DJ — pas son compte Instagram. Pour nous, le DJ n'est pas une star intouchable. C'est un technicien, un artisan, un chimiste du son. Quelqu'un qui assemble, transforme, raconte une histoire avec les morceaux des autres. C'est ça qu'on veut mettre en avant.</div>
+        <div class="about-col">Mais surtout, le cœur du projet, c’est vous. Le public. Ceux qui digg, écoutent et dansent. Ceux qui ont des pépites anciennes comme récentes cachées dans leurs playlists et qui n’attendent qu’une chose : les partager. Tracklist, c’est donner un espace à ces morceaux, les faire sortir de l’ombre et les voir prendre vie entre les mains d’un DJ.</div>
+        <div class="about-col">Alors on a imaginé un concept simple: Le public propose des sons, on construit une tracklist collective, et un DJ a pour mission de la jouer, de la sublimer, de lui donner vie. Pas de zone de confort. Un challenge: composer avec vos choix, vos univers, vos surprises.</div>
+        <div class="about-col">Mais Tracklist ne s’arrête pas au son: on veut relancer le dialogue entre la musique et l’image en remettant le VJ aux côtés du DJ comme véritable partenaire de set. Chaque set est accompagné d’un visuel unique et devient une oeuvre double, sonore et visuelle. Une expérience complète, vivante et immersive, construite à deux.</div>
+      </div>
+
+      <div class="about-closing">
+        <p class="about-subtitle">Parce que la musique, c'est un échange.<br>Pas un monologue.</p>
+      </div>
+      <div class="about-infos">
+        <p>Vous pouvez soumettre jusqu'à 2 tracks, sans compte.<br> Votre pseudo sera affiché dans le visuel accompagnant le set si votre track a été choisie.</p>
+      </div>
+
     </div>
   </main>
 

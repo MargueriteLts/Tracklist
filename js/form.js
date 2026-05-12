@@ -20,8 +20,16 @@ function openSubmit(tlId) {
   document.getElementById('submit-progress-pct').textContent   = Math.round(progressPct) + '%';
   document.getElementById('submit-tracklist-name').textContent = tl.tracklistName;
   document.getElementById('submit-dj-tags').textContent        = tl.tags.map(t => '#' + t).join(' ');
-  document.getElementById('submit-dj-name').textContent        = tl.mystery ? 'X X X X X' : tl.djName;
+  document.getElementById('submit-dj-name').textContent        = tl.mystery ? 'X X X X X' : (tl.djName || '');
   document.getElementById('submit-dj-bio').textContent         = (!tl.mystery && tl.djBio) ? tl.djBio : '';
+
+  const photoEl = document.getElementById('submit-dj-photo');
+  if (tl.mystery) {
+    photoEl.style.display = 'none';
+  } else {
+    photoEl.style.display = '';
+    photoEl.innerHTML = tl.photo ? `<img src="${tl.photo}" alt="${tl.djName || 'DJ'}" />` : '';
+  }
 
   // Message de limite adapté au contexte
   document.getElementById('submit-limit-note').textContent = spotsLeft === 1
@@ -39,6 +47,7 @@ function openSubmit(tlId) {
 
   _showFormState();
   showPage('submit');
+  if (!_restoringFromHistory) history.pushState({ page: 'submit', tlId }, '', `/submit/${tlId}`);
 }
 
 /* ── VALIDATION ──────────────────────────────────────────────── */
@@ -194,7 +203,7 @@ function _showConfirmState(trackName, canSendMore) {
   }
 
   const btn2       = document.createElement('button');
-  btn2.className   = 'btn btn-ghost';
+  btn2.className   = canSendMore ? 'btn btn-ghost' : 'btn btn-outline';
   btn2.textContent = 'Envoyer une track à une autre tracklist';
   btn2.onclick     = () => goHome();
   actionsEl.appendChild(btn2);
