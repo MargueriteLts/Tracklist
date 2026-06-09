@@ -208,7 +208,7 @@ nav.scrolled { border-color: var(--border); }
 #page-home::before,
 #page-about::before {
   content: 'NO STARS.\A JUST TRACKS.';
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -245,6 +245,32 @@ nav.scrolled { border-color: var(--border); }
 }
 .tracklist-card:nth-child(2) { animation-delay: 0.07s; }
 .tracklist-card:nth-child(3) { animation-delay: 0.14s; }
+
+/* Empty state */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 80px 24px;
+  text-align: center;
+  animation: fadeUp 0.5s ease both;
+}
+.empty-state-title {
+  font-family: var(--font-display);
+  font-size: var(--fs-h2);
+  font-weight: var(--fw-boldS);
+  letter-spacing: var(--ls-snug);
+  color: var(--text);
+  margin: 0;
+}
+.empty-state-sub {
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  color: var(--text-dim);
+  letter-spacing: var(--ls-normal);
+  margin: 0;
+}
 
 /* Progress bar */
 .progress-wrap-row {
@@ -775,7 +801,7 @@ nav.scrolled { border-color: var(--border); }
   padding: 0 48px 28px 48px;
   flex: 1;
   min-height: 0;
-  overflow-y: auto;
+  overflow: hidden;
 }
 
 .about-content {
@@ -785,7 +811,7 @@ nav.scrolled { border-color: var(--border); }
   animation: fadeUp 0.4s ease both;
   display: flex;
   flex-direction: column;
-  gap: 64px;
+  gap: clamp(12px, 2.5vh, 64px);
 }
 
 .about-intro,
@@ -794,45 +820,50 @@ nav.scrolled { border-color: var(--border); }
   text-align: center;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: clamp(8px, 1.5vh, 16px);
 }
 
 .about-subtitle {
   font-family: var(--font-display);
-  font-size: var(--fs-xl);
+  font-size: clamp(20px, min(4vw, 6vh), 56px);
   font-weight: var(--fw-boldX);
   letter-spacing: var(--ls-normal);
   text-transform: uppercase;
   color: var(--text);
+  line-height: 1.1;
+  overflow-wrap: break-word;
 }
 
 .about-closing .about-subtitle {
-  font-size: var(--fs-h3);
+  font-size: clamp(14px, 1.8vh, 18px);
   font-weight: var(--fw-medium);
 }
 
 .about-columns {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 20px;
+  gap: clamp(10px, 1.5vw, 20px);
   align-items: start;
 }
 
 .about-col {
   font-family: var(--font-body);
-  font-size: var(--fs-body);
+  font-size: clamp(11px, 1.4vh, 15px);
   font-weight: var(--fw-light);
   letter-spacing: var(--ls-normal);
   color: var(--text);
-  line-height: 1.1;
+  line-height: 1.4;
+  overflow-wrap: break-word;
 }
 
 .about-subparagraph {
   font-family: var(--font-body);
-  font-size: var(--fs-h3);
+  font-size: clamp(14px, 1.8vh, 18px);
   font-weight: var(--fw-medium);
   letter-spacing: var(--ls-normal);
   color: var(--text);
+  line-height: 1.5;
+  overflow-wrap: break-word;
 }
 
 .about-infos {
@@ -841,6 +872,8 @@ nav.scrolled { border-color: var(--border); }
   font-weight: var(--fw-light);
   letter-spacing: var(--ls-normal);
   color: var(--text-dim);
+  line-height: 1.5;
+  overflow-wrap: break-word;
 }
 
 /* ── MODAL ───────────────────────────────────────────────────── */
@@ -955,6 +988,10 @@ footer {
 }
 
 /* ── RESPONSIVE ──────────────────────────────────────────────── */
+@media (max-width: 960px) {
+  .about-columns { grid-template-columns: repeat(3, 1fr); }
+}
+
 @media (max-width: 680px) {
   nav { padding: 14px 20px; }
   .nav-logo { font-size: 20px; }
@@ -968,10 +1005,12 @@ footer {
   #page-submit { padding: 0 20px 28px; }
   .submit-header { margin-bottom: 48px; }
   .form-row { grid-template-columns: 1fr; gap: 16px; }
+  .submit-dj-profile { flex-wrap: wrap; justify-content: center; }
 
-  #page-about { padding: 24px 20px; }
-  .about-content { gap: 40px; }
-  .about-columns { grid-template-columns: 1fr; }
+  #page-about { padding: 20px 20px; }
+  .about-content { gap: clamp(16px, 4vh, 40px); }
+  .about-columns { display: none; }
+  .about-subtitle { font-size: clamp(20px, 7vw, 40px); }
 
   footer { padding: 12px 20px; }
 }

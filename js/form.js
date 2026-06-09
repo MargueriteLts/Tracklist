@@ -8,6 +8,14 @@
 function openSubmit(tlId) {
   const tl = TRACKLISTS.find(t => t.id === tlId);
   if (!tl) return;
+
+  if (getUserCount(tl.id) >= tl.maxTracks) {
+    renderHome();
+    history.replaceState({ page: 'home' }, '', '/');
+    showPage('home');
+    return;
+  }
+
   currentTl = tl;
 
   const userCount    = getUserCount(tl.id);

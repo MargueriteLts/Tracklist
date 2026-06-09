@@ -4,7 +4,12 @@
 
 let currentTl = null;
 
-renderSkeleton(3);
+const _initialPath = window.location.pathname;
+const _isDirectSubmit = _initialPath.startsWith('/submit/');
+
+if (!_isDirectSubmit) {
+  renderSkeleton(3);
+}
 
 // Charge les playlists et les compteurs depuis Airtable avant de rendre la home
 const uid = getOrCreateUID();
@@ -40,24 +45,24 @@ Promise.all([
     console.warn('Impossible de charger les données depuis Airtable.');
   })
   .finally(() => {
-    renderHome();
-
-    const path = window.location.pathname;
-    if (path === '/about') {
-      history.replaceState({ page: 'about' }, '', '/about');
-      showPage('about');
-    } else if (path.startsWith('/submit/')) {
-      const id = path.slice('/submit/'.length);
+    if (_isDirectSubmit) {
+      const id = _initialPath.slice('/submit/'.length);
       const tl = TRACKLISTS.find(t => t.id === id);
       if (tl) {
-        history.replaceState({ page: 'submit', tlId: id }, '', path);
+        history.replaceState({ page: 'submit', tlId: id }, '', _initialPath);
         _restoringFromHistory = true;
         openSubmit(id);
         _restoringFromHistory = false;
       } else {
+        renderHome();
         history.replaceState({ page: 'home' }, '', '/');
       }
+    } else if (_initialPath === '/about') {
+      renderHome();
+      history.replaceState({ page: 'about' }, '', '/about');
+      showPage('about');
     } else {
+      renderHome();
       history.replaceState({ page: 'home' }, '', '/');
     }
   });

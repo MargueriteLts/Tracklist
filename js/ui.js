@@ -73,6 +73,15 @@ function renderHome() {
   const grid = document.getElementById('tracklist-grid');
   grid.innerHTML = '';
 
+  if (TRACKLISTS.length === 0) {
+    grid.innerHTML = `
+      <div class="empty-state">
+        <p class="empty-state-title">${t('empty.title')}</p>
+        <p class="empty-state-sub">${t('empty.sub')}</p>
+      </div>`;
+    return;
+  }
+
   TRACKLISTS.forEach(tl => {
     const userCount    = getUserCount(tl.id);
     const isFull       = tl.currentTotal >= tl.totalCapacity;

@@ -43,6 +43,10 @@ const TRANSLATIONS = {
     'card.send_btn':  'Envoyer des tracks',
     'deadline':       'Deadline : 26.05.26',
 
+    /* État vide */
+    'empty.title': 'Pas encore de tracklists disponibles',
+    'empty.sub':   'Revenez bientôt — de nouvelles tracklists arrivent prochainement.',
+
     /* Confirmation */
     'confirm.title':      'Track envoyée !',
     'confirm.can_more':   'Tu peux encore envoyer une track à cette tracklist.',
@@ -59,7 +63,7 @@ const TRANSLATIONS = {
     'footer': 'TRACKLIST © 2026 — Tous droits réservés',
 
     /* About */
-    'about.subtitle1':    'La musique avant tout.<br>Avant les noms, avant les followers,<br>avant les algorithmes qui te dictent qui&nbsp;tu&nbsp;dois&nbsp;aller&nbsp;voir.',
+    'about.subtitle1':    'La musique avant tout.<br>Avant les noms, avant les followers,<br>avant les algorithmes qui te dictent qui tu dois aller voir.',
     'about.subparagraph': "Tracklist est né d'un constat simple : aujourd'hui le DJ est devenu une idole, omniprésente, non pas pour ses skills mais pour ses followers.<br><span class=\"red-text\">On regarde qui joue au lieu d'écouter ce qui est joué.</span>",
     'about.col1': "La musique passe au second plan, les lighteux·ses sont oublié·es, le VJ a complètement disparu des line-ups et les producteur·ices restent dans l'ombre alors que leurs tracks circulent.",
     'about.col2': "Avec Tracklist, on veut inverser ça. Donner de la visibilité aux producteur·ices. Remettre en valeur l'art du VJing. Et replacer au centre ce qui compte : le savoir-faire du DJ — pas son compte Instagram. Pour nous, le DJ n'est pas une star intouchable. C'est un technicien, un artisan, un chimiste du son. Quelqu'un qui assemble, transforme, raconte une histoire avec les morceaux des autres. C'est ça qu'on veut mettre en avant.",
@@ -109,6 +113,10 @@ const TRANSLATIONS = {
     'card.send_btn':  'Send tracks',
     'deadline':       'Deadline: 26.05.26',
 
+    /* Empty state */
+    'empty.title': 'No tracklists available yet',
+    'empty.sub':   'Come back soon — new tracklists are on their way.',
+
     /* Confirmation */
     'confirm.title':      'Track sent!',
     'confirm.can_more':   'You can send another track to this tracklist.',
@@ -125,7 +133,7 @@ const TRANSLATIONS = {
     'footer': 'TRACKLIST © 2026 — All rights reserved',
 
     /* About */
-    'about.subtitle1':    'Music first.<br>Before names, before followers,<br>before the algorithms telling you who&nbsp;to&nbsp;see.',
+    'about.subtitle1':    'Music first.<br>Before names, before followers,<br>before the algorithms telling you who to see.',
     'about.subparagraph': "Tracklist was born from a simple observation: today's DJ has become an idol — everywhere, not for their skills but for their follower count.<br><span class=\"red-text\">We watch who's playing instead of listening to what's being played.</span>",
     'about.col1': "Music takes a back seat, lighting designers are forgotten, VJs have all but disappeared from lineups, and producers stay in the shadows while their tracks go around.",
     'about.col2': "With Tracklist, we want to flip that. Give visibility to producers. Bring VJing back into the spotlight. And put what actually matters at the center: the DJ's craft — not their Instagram. For us, the DJ isn't an untouchable star. They're a technician, an artisan, a sound chemist — someone who assembles, transforms, tells a story with other people's tracks. That's what we want to put forward.",
