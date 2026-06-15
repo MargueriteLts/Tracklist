@@ -219,7 +219,7 @@ nav.scrolled { border-color: var(--border); }
 #page-home::before,
 #page-about::before {
   content: 'NO STARS.\A JUST TRACKS.';
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -1023,7 +1023,8 @@ footer {
 @media (orientation: portrait) {
   #page-home::before,
   #page-about::before {
-    font-size: min(160px, 38vw);
-    line-height: 1.4;
+    font-size: 12vh;
+    line-height: 35vw;
+    transform: translate(-50%, -50%) rotate(-90deg);
   }
 }
