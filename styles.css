@@ -1023,8 +1023,9 @@ footer {
 @media (orientation: portrait) {
   #page-home::before,
   #page-about::before {
-    font-size: 12vh;
+    font-size: 12svh;
     line-height: 35vw;
+    top: 50svh;
     transform: translate(-50%, -50%) rotate(-90deg);
   }
 }
