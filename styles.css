@@ -1025,7 +1025,7 @@ footer {
   #page-about::before {
     font-size: 12svh;
     line-height: 35vw;
-    top: 50svh;
+    top: 55svh;
     transform: translate(-50%, -50%) rotate(-90deg);
   }
 }
