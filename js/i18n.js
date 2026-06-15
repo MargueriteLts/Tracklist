@@ -41,7 +41,7 @@ const TRANSLATIONS = {
     'card.full_cta':  'Tracklist complète',
     'card.sent':      '{max}/{max} tracks envoyées',
     'card.send_btn':  'Envoyer des tracks',
-    'deadline':       'Deadline : 26.05.26',
+    'deadline_label': 'Deadline :',
 
     /* État vide */
     'empty.title': 'Pas encore de tracklists disponibles',
@@ -68,9 +68,9 @@ const TRANSLATIONS = {
     'about.col1': "La musique passe au second plan, les lighteux·ses sont oublié·es, le VJ a complètement disparu des line-ups et les producteur·ices restent dans l'ombre alors que leurs tracks circulent.",
     'about.col2': "Avec Tracklist, on veut inverser ça. Donner de la visibilité aux producteur·ices. Remettre en valeur l'art du VJing. Et replacer au centre ce qui compte : le savoir-faire du DJ — pas son compte Instagram. Pour nous, le DJ n'est pas une star intouchable. C'est un technicien, un artisan, un chimiste du son. Quelqu'un qui assemble, transforme, raconte une histoire avec les morceaux des autres. C'est ça qu'on veut mettre en avant.",
     'about.col3': "Mais surtout, le cœur du projet, c'est vous. Le public. Ceux qui digg, écoutent et dansent. Ceux qui ont des pépites anciennes comme récentes cachées dans leurs playlists et qui n'attendent qu'une chose : les partager. Tracklist, c'est donner un espace à ces morceaux, les faire sortir de l'ombre et les voir prendre vie entre les mains d'un DJ.",
-    'about.col4': "Alors on a imaginé un concept simple : le public propose des sons, on construit une tracklist collective, et un DJ a pour mission de la jouer, de la sublimer, de lui donner vie. Pas de zone de confort. Un challenge : composer avec vos choix, vos univers, vos surprises.",
+    'about.col4': "Alors on a imaginé un concept simple : le public propose des sons, on construit une tracklist collective, et un DJ a pour mission de lui donner vie, de la sublimer, d'en faire un set. Pas de zone de confort. Un challenge : composer avec vos choix, vos univers, vos surprises.",
     'about.col5': "Mais Tracklist ne s'arrête pas au son : on veut relancer le dialogue entre la musique et l'image en remettant le VJ aux côtés du DJ comme véritable partenaire de set. Chaque set est accompagné d'un visuel unique et devient une œuvre double, sonore et visuelle. Une expérience complète, vivante et immersive, construite à deux.",
-    'about.infos': "Vous pouvez soumettre jusqu'à 2 tracks, sans compte.<br>Votre pseudo sera affiché dans le visuel accompagnant le set si votre track a été choisie.",
+    'about.infos': "Comment ça marche?<br>Vous pouvez soumettre jusqu'à 2 tracks par tracklist, sans créer de compte.<br>Votre pseudo sera affiché dans le visuel accompagnant le set si votre track a été choisie.",
     'about.closing': "Parce que la musique, c'est un échange.<br>Pas un monologue.",
   },
 
@@ -111,7 +111,7 @@ const TRANSLATIONS = {
     'card.full_cta':  'Tracklist full',
     'card.sent':      '{max}/{max} tracks sent',
     'card.send_btn':  'Send tracks',
-    'deadline':       'Deadline: 26.05.26',
+    'deadline_label': 'Deadline:',
 
     /* Empty state */
     'empty.title': 'No tracklists available yet',
@@ -134,13 +134,13 @@ const TRANSLATIONS = {
 
     /* About */
     'about.subtitle1':    'Music first.<br>Before names, before followers,<br>before the algorithms telling you who to see.',
-    'about.subparagraph': "Tracklist was born from a simple observation: today's DJ has become an idol — everywhere, not for their skills but for their follower count.<br><span class=\"red-text\">We watch who's playing instead of listening to what's being played.</span>",
-    'about.col1': "Music takes a back seat, lighting designers are forgotten, VJs have all but disappeared from lineups, and producers stay in the shadows while their tracks go around.",
-    'about.col2': "With Tracklist, we want to flip that. Give visibility to producers. Bring VJing back into the spotlight. And put what actually matters at the center: the DJ's craft — not their Instagram. For us, the DJ isn't an untouchable star. They're a technician, an artisan, a sound chemist — someone who assembles, transforms, tells a story with other people's tracks. That's what we want to put forward.",
-    'about.col3': "But most of all, you are the heart of this project. The audience. The ones who dig, listen, and dance. The ones with hidden gems — old and new — in their playlists, just waiting to share them. Tracklist is about giving these tracks a space, pulling them out of the shadows and watching them come alive in a DJ's hands.",
-    'about.col4': "So we came up with a simple concept: the audience submits tracks, we build a collective tracklist, and a DJ's mission is to play it, elevate it, bring it to life. No comfort zone. A challenge: compose with your choices, your worlds, your surprises.",
-    'about.col5': "But Tracklist doesn't stop at sound: we want to restart the dialogue between music and image by placing the VJ back beside the DJ as a true set partner. Every set is accompanied by a unique visual and becomes a double work — sonic and visual. A complete, living, immersive experience, built by two.",
-    'about.infos': "You can submit up to 2 tracks, no account needed.<br>Your username will appear in the set's visual if your track gets selected.",
+    'about.subparagraph': "Tracklist was born from a simple observation: today, the DJ has become an idol — omnipresent, not for their skills, but for their follower count.<br><span class=\"red-text\">We watch who's playing instead of listening to what's being played.</span>",
+    'about.col1': "Music gets pushed to the background, lighting designers get forgotten, the VJ has disappeared from line-ups entirely, and producers stay in the shadows while their tracks circulate.",
+    'about.col2': "With Tracklist, we want to flip that. Give visibility to producers. Share music for what it is. Bring the art of VJing back into the light. And put what actually matters back at the center: the DJ's craft — not their Instagram. For us, the DJ is not an untouchable star.They're a technician, an artisan, a sound chemist. Someone who assembles, transforms, tells a story with other people's tracks. That's what we want to celebrate.",
+    'about.col3': "But above all, the heart of the project is you. The audience. The ones who dig, listen, and dance. Those who have hidden gems — old and new — buried in their playlists, just waiting to be shared. Tracklist is about giving those tracks a space, bringing them out of the shadows and watching them come alive in a DJ's hands.",
+    'about.col4': "So we came up with a simple concept: You submit tracks, we build a collective playlist, and a DJ's job is to make it work — to elevate it, shape it, turn it into a set. No comfort zone. One challenge: to mix with your choices, your worlds, your surprises.",
+    'about.col5': "But Tracklist doesn't stop at sound. We want to reopen the dialogue between music and image by bringing the VJ back alongside the DJ as a true creative partner. Every set gets its own unique visual, making it a double work — sonic and visual. A living, immersive, whole experience, built by two.",
+    'about.infos': "How it works?<br>You can submit up to 2 tracks per tracklist, no account needed.<br>Your username will appear in the set's visual if your track gets selected.",
     'about.closing': 'Because music is an exchange.<br>Not a monologue.',
   },
 };
@@ -169,6 +169,10 @@ function setLang(lang) {
     const bioEl = document.getElementById('submit-dj-bio');
     if (bioEl && currentTl.djBio && typeof currentTl.djBio === 'object') {
       bioEl.textContent = currentTl.djBio[lang] || currentTl.djBio.fr;
+    }
+    const deadlineEl = document.getElementById('submit-deadline');
+    if (deadlineEl) {
+      deadlineEl.textContent = currentTl.deadline ? `${t('deadline_label')} ${currentTl.deadline}` : '';
     }
   }
 }

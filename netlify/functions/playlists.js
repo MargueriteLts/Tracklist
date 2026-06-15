@@ -54,6 +54,7 @@ exports.handler = async (event) => {
       totalCapacity: r.fields.totalCapacity || 60,
       currentTotal: 0,
       mystery: r.fields.mystery || false,
+      deadline: r.fields.deadline || null,
     }));
 
   return {

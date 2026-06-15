@@ -143,6 +143,6 @@ function _buildCardHTML({ tl, isFull, userDone, userCount, progressPct, effectiv
     <div class="card-cta">
       ${progressHtml}
       ${ctaHtml}
-      <div class="deadline-label">${t('deadline')}</div>
+      ${tl.deadline ? `<div class="deadline-label">${t('deadline_label')} ${tl.deadline}</div>` : ''}
     </div>`;
 }

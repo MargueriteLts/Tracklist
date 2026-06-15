@@ -1,12 +1,10 @@
 // netlify/functions/submit.js
 
-const AIRTABLE_TOKEN            = process.env.AIRTABLE_TOKEN;
-const AIRTABLE_BASE_ID          = process.env.AIRTABLE_BASE_ID;
-const AIRTABLE_TABLE            = process.env.AIRTABLE_TABLE_ID;
-const AIRTABLE_PLAYLISTS_TABLE  = process.env.AIRTABLE_PLAYLISTS_TABLE_ID;
-const MAX_PER_USER              = 2;
+const AIRTABLE_TOKEN           = process.env.AIRTABLE_TOKEN;
+const AIRTABLE_BASE_ID         = process.env.AIRTABLE_BASE_ID;
+const AIRTABLE_PLAYLISTS_TABLE = process.env.AIRTABLE_PLAYLISTS_TABLE_ID;
+const MAX_PER_USER             = 2;
 
-const AIRTABLE_API          = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE}`;
 const AIRTABLE_PLAYLISTS_API = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_PLAYLISTS_TABLE}`;
 
 const headers = {
@@ -43,10 +41,10 @@ exports.handler = async (event) => {
     };
   }
 
-  const { uid, tracklist_id, tracklist_name, pseudo, track, link } = body;
+  const { uid, tracklist_id, pseudo, track, link } = body;
 
   // Validation des champs requis
-  if (!uid || !tracklist_id || !tracklist_name || !pseudo || !track) {
+  if (!uid || !tracklist_id || !pseudo || !track) {
     return {
       statusCode: 400,
       headers: cors,
@@ -54,10 +52,10 @@ exports.handler = async (event) => {
     };
   }
 
-  // Vérifie que la tracklist existe et n'est pas cachée dans Airtable
+  // Vérifie que la tracklist existe, n'est pas cachée, et récupère son tableId
   const filterPlaylist = encodeURIComponent(`AND({id}="${tracklist_id}", NOT({hidden}))`);
   const playlistCheck = await fetch(
-    `${AIRTABLE_PLAYLISTS_API}?filterByFormula=${filterPlaylist}&fields%5B%5D=id`,
+    `${AIRTABLE_PLAYLISTS_API}?filterByFormula=${filterPlaylist}&fields%5B%5D=id&fields%5B%5D=tableId`,
     { headers }
   );
   if (!playlistCheck.ok) {
@@ -75,6 +73,17 @@ exports.handler = async (event) => {
       body: JSON.stringify({ error: 'Invalid tracklist_id' }),
     };
   }
+
+  const tableId = playlistData.records[0].fields.tableId;
+  if (!tableId) {
+    return {
+      statusCode: 400,
+      headers: cors,
+      body: JSON.stringify({ error: 'No submissions table configured for this tracklist' }),
+    };
+  }
+
+  const SUBMISSIONS_API = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${tableId}`;
 
   // Validation des longueurs
   if (pseudo.length > 50 || track.length > 200 || (link && link.length > 500)) {
@@ -94,17 +103,13 @@ exports.handler = async (event) => {
     };
   }
 
-  // Vérification par uid ET par pseudo
-  const filterUid = encodeURIComponent(
-    `AND({uid}="${uid}", {tracklist_id}="${tracklist_id}")`
-  );
-  const filterPseudo = encodeURIComponent(
-    `AND({pseudo}="${pseudo}", {tracklist_id}="${tracklist_id}")`
-  );
+  // Vérification par uid ET par pseudo dans la table dédiée à cette tracklist
+  const filterUid    = encodeURIComponent(`{uid}="${uid}"`);
+  const filterPseudo = encodeURIComponent(`{pseudo}="${pseudo}"`);
 
   const [checkUid, checkPseudo] = await Promise.all([
-    fetch(`${AIRTABLE_API}?filterByFormula=${filterUid}&fields%5B%5D=uid`, { headers }),
-    fetch(`${AIRTABLE_API}?filterByFormula=${filterPseudo}&fields%5B%5D=pseudo`, { headers }),
+    fetch(`${SUBMISSIONS_API}?filterByFormula=${filterUid}&fields%5B%5D=uid`, { headers }),
+    fetch(`${SUBMISSIONS_API}?filterByFormula=${filterPseudo}&fields%5B%5D=pseudo`, { headers }),
   ]);
 
   if (!checkUid.ok || !checkPseudo.ok) {
@@ -140,14 +145,12 @@ exports.handler = async (event) => {
   // Note : le check et l'insert ne sont pas atomiques (limite Airtable).
   // Deux requêtes simultanées du même UID peuvent toutes deux passer le check.
   // Risque acceptable pour ce volume de trafic ; résoudre nécessiterait une DB SQL.
-  const insertRes = await fetch(AIRTABLE_API, {
+  const insertRes = await fetch(SUBMISSIONS_API, {
     method: 'POST',
     headers,
     body: JSON.stringify({
       fields: {
         uid,
-        tracklist_id,
-        tracklist_name,
         pseudo,
         track,
         link: link || '',

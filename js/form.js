@@ -50,6 +50,12 @@ function openSubmit(tlId) {
   // Compteur de track (ex: "1/2" ou "2/2")
   document.getElementById('track-counter').textContent = `${userCount + 1}/${effectiveMax}`;
 
+  // Deadline dynamique
+  const deadlineEl = document.getElementById('submit-deadline');
+  if (deadlineEl) {
+    deadlineEl.textContent = tl.deadline ? `${t('deadline_label')} ${tl.deadline}` : '';
+  }
+
   // Réinitialiser le formulaire
   document.getElementById('input-pseudo').value = getLastPseudo();
   document.getElementById('input-track').value  = '';
@@ -117,11 +123,10 @@ function handleSubmit(e) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       uid,
-      tracklist_id:   currentTl.id,
-      tracklist_name: currentTl.tracklistName,
+      tracklist_id: currentTl.id,
       pseudo,
-      track:          trackName,
-      link:           link || '',
+      track:        trackName,
+      link:         link || '',
     }),
   })
   .then(async res => {
