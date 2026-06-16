@@ -53,7 +53,10 @@ exports.handler = async (event) => {
   }
 
   // Vérifie que la tracklist existe, n'est pas cachée, et récupère son tableId
-  const filterPlaylist = encodeURIComponent(`AND({id}="${tracklist_id}", NOT({hidden}))`);
+  const showDrafts = process.env.SHOW_DRAFTS === 'true';
+  const filterPlaylist = showDrafts
+    ? encodeURIComponent(`{id}="${tracklist_id}"`)
+    : encodeURIComponent(`AND({id}="${tracklist_id}", NOT({hidden}))`);
   const playlistCheck = await fetch(
     `${AIRTABLE_PLAYLISTS_API}?filterByFormula=${filterPlaylist}&fields%5B%5D=id&fields%5B%5D=tableId`,
     { headers }

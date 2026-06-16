@@ -36,8 +36,10 @@ exports.handler = async (event) => {
 
   const data = await res.json();
 
+  const showDrafts = process.env.SHOW_DRAFTS === 'true';
+
   const playlists = data.records
-    .filter(r => r.fields.id && !r.fields.hidden)
+    .filter(r => r.fields.id && (!r.fields.hidden || showDrafts))
     .map(r => ({
       id: r.fields.id,
       tracklistName: r.fields.tracklistName || '',
@@ -49,7 +51,7 @@ exports.handler = async (event) => {
       tags: r.fields.tags
         ? r.fields.tags.split(',').map(t => t.trim()).filter(Boolean)
         : [],
-      photo: r.fields.photo || null,
+      photo: Array.isArray(r.fields.photo) ? (r.fields.photo[0]?.url || null) : (r.fields.photo || null),
       maxTracks: r.fields.maxTracks || 2,
       totalCapacity: r.fields.totalCapacity || 60,
       currentTotal: 0,

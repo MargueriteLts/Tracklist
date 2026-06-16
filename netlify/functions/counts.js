@@ -60,8 +60,10 @@ exports.handler = async (event) => {
   }
 
   const playlistsData = await playlistsRes.json();
+  const showDrafts = process.env.SHOW_DRAFTS === 'true';
+
   const activePlaylists = playlistsData.records.filter(
-    r => r.fields.id && r.fields.tableId && !r.fields.hidden
+    r => r.fields.id && r.fields.tableId && (!r.fields.hidden || showDrafts)
   );
 
   // Requête chaque table en parallèle
