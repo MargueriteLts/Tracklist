@@ -4,6 +4,9 @@
 
 let currentTl = null;
 
+// Fix iOS Safari : sans ce listener, :active ne se relâche pas après le toucher
+document.addEventListener('touchstart', function () {}, { passive: true });
+
 const _initialPath = window.location.pathname;
 const _isDirectSubmit = _initialPath.startsWith('/submit/');
 

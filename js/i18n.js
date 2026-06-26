@@ -18,7 +18,7 @@ const TRANSLATIONS = {
     'form.optional':       '(facultatif)',
     'form.submit_btn':          'Envoyer',
     'form.submitting':          'Envoi…',
-    'form.pseudo_placeholder':  'dj_shadow_fan',
+    'form.pseudo_placeholder':  'Not_a_DJ',
     'form.track_placeholder':   'Track — Artiste',
     'form.link_placeholder':    'Spotify, SoundCloud, YouTube…',
 
@@ -88,7 +88,7 @@ const TRANSLATIONS = {
     'form.optional':       '(optional)',
     'form.submit_btn':          'Send',
     'form.submitting':          'Sending…',
-    'form.pseudo_placeholder':  'dj_shadow_fan',
+    'form.pseudo_placeholder':  'Not_a_DJ',
     'form.track_placeholder':   'Track — Artist',
     'form.link_placeholder':    'Spotify, SoundCloud, YouTube…',
 

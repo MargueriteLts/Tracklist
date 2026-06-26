@@ -209,7 +209,7 @@ function _showConfirmState(trackName, canSendMore) {
   }
 
   const btn2       = document.createElement('button');
-  btn2.className   = canSendMore ? 'btn btn-ghost' : 'btn btn-outline';
+  btn2.className   = canSendMore ? 'btn btn-ghost' : 'btn btn-solid';
   btn2.textContent = t('confirm.btn_other');
   btn2.onclick     = () => goHome();
   actionsEl.appendChild(btn2);
